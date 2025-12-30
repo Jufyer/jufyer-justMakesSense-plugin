@@ -1,0 +1,19 @@
+# Enable or Disable features.
+# If you write "true" behind a feature then it will be activated.
+# If you write "false" behind it the feature will be disabled.
+
+# Also be carefully with the Debug Mode. Because if you enable it all player who are OP can use the following commands:
+# - spawnShark
+# - spawnNibbler
+# - spawnGoldfish
+# - spawnWhale
+# - spawnOyster
+
+Banners on boats: true
+Goldfishes: true
+Nibblers: true
+Ocean Glider: true
+Oysters: true
+Sharks: true
+Whales: true
+Debug: false

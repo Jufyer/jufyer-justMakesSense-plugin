@@ -1,0 +1,127 @@
+[13:11:49] [ServerMain/INFO]: [bootstrap] Running Java 21 (OpenJDK 64-Bit Server VM 21.0.9+10-Ubuntu-124.04; Ubuntu null) on Linux 6.14.0-37-generic (amd64)
+[13:11:49] [ServerMain/INFO]: [bootstrap] Loading Paper 1.21.4-232-ver/1.21.4@12d8fe0 (2025-06-09T10:15:42Z) for Minecraft 1.21.4
+[13:11:49] [ServerMain/INFO]: [PluginInitializerManager] Initializing plugins...
+[13:11:50] [ServerMain/INFO]: [PluginInitializerManager] Initialized 1 plugin
+[13:11:50] [ServerMain/INFO]: [PluginInitializerManager] Bukkit plugins (1):
+ - jufyer-aquatic-plugin (1.0.0-SNAPSHOT)
+[13:11:52] [ServerMain/INFO]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[13:11:53] [ServerMain/INFO]: Loaded 1370 recipes
+[13:11:53] [ServerMain/INFO]: Loaded 1481 advancements
+[13:11:53] [ServerMain/INFO]: [MCTypeRegistry] Initialising converters for DataConverter...
+[13:11:53] [ServerMain/INFO]: [MCTypeRegistry] Finished initialising converters for DataConverter in 115,5ms
+[13:11:53] [Server thread/INFO]: Starting minecraft server version 1.21.4
+[13:11:53] [Server thread/INFO]: Loading properties
+[13:11:53] [Server thread/INFO]: This server is running Paper version 1.21.4-232-ver/1.21.4@12d8fe0 (2025-06-09T10:15:42Z) (Implementing API version 1.21.4-R0.1-SNAPSHOT)
+[13:11:53] [Server thread/INFO]: [spark] This server bundles the spark profiler. For more information please visit https://docs.papermc.io/paper/profiling
+[13:11:53] [Server thread/INFO]: Server Ping Player Sample Count: 12
+[13:11:53] [Server thread/INFO]: Using 4 threads for Netty based IO
+[13:11:54] [Server thread/INFO]: [MoonriseCommon] Paper is using 4 worker threads, 1 I/O threads
+[13:11:54] [Server thread/INFO]: [ChunkTaskScheduler] Chunk system is using population gen parallelism: true
+[13:11:54] [Server thread/INFO]: Default game type: SURVIVAL
+[13:11:54] [Server thread/INFO]: Generating keypair
+[13:11:54] [Server thread/INFO]: Starting Minecraft server on *:25565
+[13:11:54] [Server thread/INFO]: Using epoll channel type
+[13:11:54] [Server thread/INFO]: Paper: Using libdeflate (Linux x86_64) compression from Velocity.
+[13:11:54] [Server thread/INFO]: Paper: Using OpenSSL 3.x.x (Linux x86_64) cipher from Velocity.
+[13:11:54] [Server thread/INFO]: [jufyer-aquatic-plugin] Loading server plugin jufyer-aquatic-plugin v1.0.0-SNAPSHOT
+[13:11:54] [Server thread/INFO]: Server permissions file permissions.yml is empty, ignoring it
+[13:11:54] [Server thread/INFO]: [jufyer-aquatic-plugin] Enabling jufyer-aquatic-plugin v1.0.0-SNAPSHOT
+[13:11:54] [Server thread/INFO]: [jufyer-aquatic-plugin] The following features are enabled: 
+[13:11:54] [Server thread/INFO]: [jufyer-aquatic-plugin] Banners on boats
+[13:11:54] [Server thread/INFO]: [jufyer-aquatic-plugin] Goldfishes
+[13:11:54] [Server thread/INFO]: [jufyer-aquatic-plugin] Nibblers
+[13:11:54] [Server thread/INFO]: [jufyer-aquatic-plugin] Ocean Glider
+[13:11:54] [Server thread/WARN]: java.lang.Throwable: Warning: A plugin is creating a recipe using a Deprecated method. This will cause you to receive warnings stating 'Tried to load unrecognized recipe: bukkit:<ID>'. Please ask the author to give their recipe a static key using NamespacedKey.
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.inventory.ShapedRecipe.<init>(ShapedRecipe.java:34)
+[13:11:54] [Server thread/WARN]: 	at jufyer-aquatic-plugin-1.0.0-SNAPSHOT.jar//org.jufyer.plugin.aquatic.Main.onEnable(Main.java:139)
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.plugin.java.JavaPlugin.setEnabled(JavaPlugin.java:280)
+[13:11:54] [Server thread/WARN]: 	at io.papermc.paper.plugin.manager.PaperPluginInstanceManager.enablePlugin(PaperPluginInstanceManager.java:202)
+[13:11:54] [Server thread/WARN]: 	at io.papermc.paper.plugin.manager.PaperPluginManagerImpl.enablePlugin(PaperPluginManagerImpl.java:109)
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.plugin.SimplePluginManager.enablePlugin(SimplePluginManager.java:520)
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.craftbukkit.CraftServer.enablePlugin(CraftServer.java:658)
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.craftbukkit.CraftServer.enablePlugins(CraftServer.java:607)
+[13:11:54] [Server thread/WARN]: 	at net.minecraft.server.dedicated.DedicatedServer.initServer(DedicatedServer.java:278)
+[13:11:54] [Server thread/WARN]: 	at net.minecraft.server.MinecraftServer.runServer(MinecraftServer.java:1163)
+[13:11:54] [Server thread/WARN]: 	at net.minecraft.server.MinecraftServer.lambda$spin$2(MinecraftServer.java:310)
+[13:11:54] [Server thread/WARN]: 	at java.base/java.lang.Thread.run(Thread.java:1583)
+[13:11:54] [Server thread/INFO]: [jufyer-aquatic-plugin] Oysters
+[13:11:54] [Server thread/INFO]: [jufyer-aquatic-plugin] Sharks
+[13:11:54] [Server thread/WARN]: java.lang.Throwable: Warning: A plugin is creating a recipe using a Deprecated method. This will cause you to receive warnings stating 'Tried to load unrecognized recipe: bukkit:<ID>'. Please ask the author to give their recipe a static key using NamespacedKey.
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.inventory.ShapedRecipe.<init>(ShapedRecipe.java:34)
+[13:11:54] [Server thread/WARN]: 	at jufyer-aquatic-plugin-1.0.0-SNAPSHOT.jar//org.jufyer.plugin.aquatic.Main.onEnable(Main.java:191)
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.plugin.java.JavaPlugin.setEnabled(JavaPlugin.java:280)
+[13:11:54] [Server thread/WARN]: 	at io.papermc.paper.plugin.manager.PaperPluginInstanceManager.enablePlugin(PaperPluginInstanceManager.java:202)
+[13:11:54] [Server thread/WARN]: 	at io.papermc.paper.plugin.manager.PaperPluginManagerImpl.enablePlugin(PaperPluginManagerImpl.java:109)
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.plugin.SimplePluginManager.enablePlugin(SimplePluginManager.java:520)
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.craftbukkit.CraftServer.enablePlugin(CraftServer.java:658)
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.craftbukkit.CraftServer.enablePlugins(CraftServer.java:607)
+[13:11:54] [Server thread/WARN]: 	at net.minecraft.server.dedicated.DedicatedServer.initServer(DedicatedServer.java:278)
+[13:11:54] [Server thread/WARN]: 	at net.minecraft.server.MinecraftServer.runServer(MinecraftServer.java:1163)
+[13:11:54] [Server thread/WARN]: 	at net.minecraft.server.MinecraftServer.lambda$spin$2(MinecraftServer.java:310)
+[13:11:54] [Server thread/WARN]: 	at java.base/java.lang.Thread.run(Thread.java:1583)
+[13:11:54] [Server thread/INFO]: [jufyer-aquatic-plugin] Whales
+[13:11:54] [Server thread/WARN]: java.lang.Throwable: Warning: A plugin is creating a recipe using a Deprecated method. This will cause you to receive warnings stating 'Tried to load unrecognized recipe: bukkit:<ID>'. Please ask the author to give their recipe a static key using NamespacedKey.
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.inventory.ShapedRecipe.<init>(ShapedRecipe.java:34)
+[13:11:54] [Server thread/WARN]: 	at jufyer-aquatic-plugin-1.0.0-SNAPSHOT.jar//org.jufyer.plugin.aquatic.Main.onEnable(Main.java:222)
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.plugin.java.JavaPlugin.setEnabled(JavaPlugin.java:280)
+[13:11:54] [Server thread/WARN]: 	at io.papermc.paper.plugin.manager.PaperPluginInstanceManager.enablePlugin(PaperPluginInstanceManager.java:202)
+[13:11:54] [Server thread/WARN]: 	at io.papermc.paper.plugin.manager.PaperPluginManagerImpl.enablePlugin(PaperPluginManagerImpl.java:109)
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.plugin.SimplePluginManager.enablePlugin(SimplePluginManager.java:520)
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.craftbukkit.CraftServer.enablePlugin(CraftServer.java:658)
+[13:11:54] [Server thread/WARN]: 	at org.bukkit.craftbukkit.CraftServer.enablePlugins(CraftServer.java:607)
+[13:11:54] [Server thread/WARN]: 	at net.minecraft.server.dedicated.DedicatedServer.initServer(DedicatedServer.java:278)
+[13:11:54] [Server thread/WARN]: 	at net.minecraft.server.MinecraftServer.runServer(MinecraftServer.java:1163)
+[13:11:54] [Server thread/WARN]: 	at net.minecraft.server.MinecraftServer.lambda$spin$2(MinecraftServer.java:310)
+[13:11:54] [Server thread/WARN]: 	at java.base/java.lang.Thread.run(Thread.java:1583)
+[13:11:54] [Server thread/INFO]: Preparing level "world"
+[13:11:54] [Server thread/INFO]: Preparing start region for dimension minecraft:overworld
+[13:11:54] [Server thread/INFO]: Preparing spawn area: 0%
+[13:11:55] [Server thread/INFO]: Time elapsed: 393 ms
+[13:11:55] [Server thread/INFO]: Preparing start region for dimension minecraft:the_nether
+[13:11:55] [Server thread/INFO]: Preparing spawn area: 0%
+[13:11:55] [Server thread/INFO]: Time elapsed: 49 ms
+[13:11:55] [Server thread/INFO]: Preparing start region for dimension minecraft:the_end
+[13:11:55] [Server thread/INFO]: Preparing spawn area: 0%
+[13:11:55] [Server thread/INFO]: Time elapsed: 40 ms
+[13:11:55] [Server thread/INFO]: [spark] Starting background profiler...
+[13:11:55] [Server thread/INFO]: Done preparing level "world" (0.880s)
+[13:11:55] [Server thread/INFO]: Running delayed init tasks
+[13:11:55] [Server thread/INFO]: Done (6.227s)! For help, type "help"
+[13:12:50] [User Authenticator #0/INFO]: UUID of player Jufyer is 4fc4ff2d-caa9-4ebc-b929-7e768144edcb
+[13:12:51] [Server thread/INFO]: Jufyer joined the game
+[13:12:51] [Server thread/INFO]: Jufyer[/127.0.0.1:37248] logged in with entity id 76 at ([world]66.5, 80.0, 727.5)
+[13:14:02] [Server thread/INFO]: Stopping server
+[13:14:02] [Server thread/INFO]: [jufyer-aquatic-plugin] Disabling jufyer-aquatic-plugin v1.0.0-SNAPSHOT
+[13:14:02] [Server thread/INFO]: Saving players
+[13:14:02] [Server thread/INFO]: Jufyer lost connection: Server closed
+[13:14:02] [Server thread/INFO]: Jufyer left the game
+[13:14:02] [Server thread/INFO]: Saving worlds
+[13:14:02] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'world'
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Halted chunk system for world 'world'
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Saving all chunkholders for world 'world'
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Saved 1781 block chunks, 829 entity chunks, 0 poi chunks in world 'world' in 0,38s
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk I/O to halt for world 'world'
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Halted I/O scheduler for world 'world'
+[13:14:02] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world_nether]'/minecraft:the_nether
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'world_nether'
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Halted chunk system for world 'world_nether'
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Saving all chunkholders for world 'world_nether'
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Saved 49 block chunks, 49 entity chunks, 0 poi chunks in world 'world_nether' in 0,03s
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk I/O to halt for world 'world_nether'
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Halted I/O scheduler for world 'world_nether'
+[13:14:02] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world_the_end]'/minecraft:the_end
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'world_the_end'
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Halted chunk system for world 'world_the_end'
+[13:14:02] [Server thread/INFO]: [ChunkHolderManager] Saving all chunkholders for world 'world_the_end'
+[13:14:03] [Server thread/INFO]: [ChunkHolderManager] Saved 49 block chunks, 49 entity chunks, 0 poi chunks in world 'world_the_end' in 0,04s
+[13:14:03] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk I/O to halt for world 'world_the_end'
+[13:14:03] [Server thread/INFO]: [ChunkHolderManager] Halted I/O scheduler for world 'world_the_end'
+[13:14:03] [Server thread/INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[13:14:03] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[13:14:03] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[13:14:03] [Server thread/INFO]: ThreadedAnvilChunkStorage: All dimensions are saved
+[13:14:03] [Server thread/INFO]: Waiting for I/O tasks to complete...
+[13:14:03] [Server thread/INFO]: All I/O tasks to complete
+[13:14:03] [Server thread/INFO]: [MoonriseCommon] Awaiting termination of worker pool for up to 60s...
+[13:14:03] [Server thread/INFO]: [MoonriseCommon] Awaiting termination of I/O pool for up to 60s...
