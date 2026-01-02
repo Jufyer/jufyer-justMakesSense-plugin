@@ -192,7 +192,7 @@ public class CauldronHoneyListeners implements Listener {
   // --- Save and Load ---
 
   public static void saveFilledHoneyCauldrons() {
-    File file = new File(Main.getInstance().getDataFolder(), "filledCauldrons.yml");
+    File file = new File(Main.getInstance().getDataFolder(), "filledHoneyCauldrons.yml");
     YamlConfiguration config = new YamlConfiguration();
     int i = 0;
     for (Map.Entry<Location, UUID> entry : filledCauldronEntities.entrySet()) {
@@ -204,7 +204,7 @@ public class CauldronHoneyListeners implements Listener {
   }
 
   public static void loadFilledHoneyCauldrons() {
-    File file = new File(Main.getInstance().getDataFolder(), "filledCauldrons.yml");
+    File file = new File(Main.getInstance().getDataFolder(), "filledHoneyCauldrons.yml");
     if (!file.exists()) return;
 
     YamlConfiguration config = YamlConfiguration.loadConfiguration(file);

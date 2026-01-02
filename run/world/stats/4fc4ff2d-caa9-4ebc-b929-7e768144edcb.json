@@ -1,36 +1,36 @@
 {
   "stats": {
-    "minecraft:used": {
-      "minecraft:grass_block": 6,
-      "minecraft:hopper": 21,
-      "minecraft:water_bucket": 6,
-      "minecraft:piston": 3,
-      "minecraft:redstone_block": 20,
-      "minecraft:cauldron": 73,
-      "minecraft:bee_nest": 56
-    },
-    "minecraft:custom": {
-      "minecraft:time_since_rest": 86707,
-      "minecraft:walk_one_cm": 14361,
-      "minecraft:leave_game": 26,
-      "minecraft:walk_under_water_one_cm": 258,
-      "minecraft:play_time": 86707,
-      "minecraft:jump": 66,
-      "minecraft:time_since_death": 86707,
-      "minecraft:sprint_one_cm": 6881,
-      "minecraft:fill_cauldron": 5,
-      "minecraft:inspect_hopper": 27,
-      "minecraft:fall_one_cm": 225,
-      "minecraft:total_world_time": 86707,
-      "minecraft:fly_one_cm": 255892,
-      "minecraft:walk_on_water_one_cm": 158,
-      "minecraft:crouch_one_cm": 2495,
-      "minecraft:sneak_time": 1769
-    },
     "minecraft:picked_up": {
       "minecraft:grass_block": 10,
       "minecraft:bee_nest": 21,
       "minecraft:honey_block": 240
+    },
+    "minecraft:custom": {
+      "minecraft:time_since_rest": 97003,
+      "minecraft:walk_one_cm": 17692,
+      "minecraft:leave_game": 29,
+      "minecraft:walk_under_water_one_cm": 258,
+      "minecraft:play_time": 97003,
+      "minecraft:jump": 134,
+      "minecraft:time_since_death": 97003,
+      "minecraft:sprint_one_cm": 7168,
+      "minecraft:fill_cauldron": 8,
+      "minecraft:inspect_hopper": 27,
+      "minecraft:fall_one_cm": 225,
+      "minecraft:total_world_time": 97003,
+      "minecraft:fly_one_cm": 255892,
+      "minecraft:walk_on_water_one_cm": 158,
+      "minecraft:crouch_one_cm": 2584,
+      "minecraft:sneak_time": 1895
+    },
+    "minecraft:used": {
+      "minecraft:grass_block": 6,
+      "minecraft:hopper": 21,
+      "minecraft:water_bucket": 9,
+      "minecraft:piston": 6,
+      "minecraft:redstone_block": 22,
+      "minecraft:cauldron": 85,
+      "minecraft:bee_nest": 56
     }
   },
   "DataVersion": 4671

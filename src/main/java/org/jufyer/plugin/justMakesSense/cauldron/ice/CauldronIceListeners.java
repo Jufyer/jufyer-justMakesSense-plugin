@@ -7,19 +7,29 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.BlockDisplay;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.CauldronLevelChangeEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.util.Transformation;
+import org.joml.AxisAngle4f;
+import org.joml.Vector3f;
+import org.jufyer.plugin.justMakesSense.Main;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class CauldronIceListeners implements Listener {
+
+  private final List<Location> fillingCauldrons = new ArrayList<>();
+  private static final HashMap<Location, UUID> filledCauldronEntities = new HashMap<>();
 
   @EventHandler
   public void onChunkLoad(ChunkLoadEvent event) {
@@ -35,8 +45,13 @@ public class CauldronIceListeners implements Listener {
           Block block = chunk.getBlock(x, y, z);
 
           if (block.getType() == Material.WATER_CAULDRON) {
+            Block cauldron = block;
             if (isFreezingPossible(block.getBiome(), block.getLocation().getZ())) {
-              cauldronsWithWater.add(block.getLocation());
+              if (!filledCauldronEntities.containsKey(cauldron.getLocation().toBlockLocation()) && !fillingCauldrons.contains(cauldron.getLocation().toBlockLocation())) {
+                cauldronsWithWater.add(cauldron.getLocation());
+                fillingCauldrons.add(cauldron.getLocation().toBlockLocation());
+                createRunner(cauldron.getLocation().getBlock());
+              }
             }
           }
         }
@@ -56,10 +71,14 @@ public class CauldronIceListeners implements Listener {
       for (int z = 0; z < 16; z++) {
         for (int y = minHeight; y < maxHeight; y++) {
           Block block = chunk.getBlock(x, y, z);
-
           if (block.getType() == Material.WATER_CAULDRON) {
+            Block cauldron = block;
             if (isFreezingPossible(block.getBiome(), block.getLocation().getZ())) {
-              cauldronsWithWater.add(block.getLocation());
+              if (!filledCauldronEntities.containsKey(cauldron.getLocation().toBlockLocation()) && !fillingCauldrons.contains(cauldron.getLocation().toBlockLocation())) {
+                cauldronsWithWater.add(cauldron.getLocation());
+                fillingCauldrons.add(cauldron.getLocation().toBlockLocation());
+                createRunner(cauldron.getLocation().getBlock());
+              }
             }
           }
         }
@@ -67,6 +86,81 @@ public class CauldronIceListeners implements Listener {
     }
   }
 
+  @EventHandler
+  public void onBlockBreak(BlockBreakEvent event) {
+    Location loc = event.getBlock().getLocation().toBlockLocation();
+
+    // If the cauldron is broken
+    if (event.getBlock().getType() == Material.CAULDRON) {
+      removeIceDisplay(loc);
+      fillingCauldrons.remove(loc);
+    }
+  }
+
+  @EventHandler
+  public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+    handlePistonMove(event.getBlocks(), event.getDirection());
+  }
+
+  @EventHandler
+  public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+    handlePistonMove(event.getBlocks(), event.getDirection());
+  }
+
+  private void handlePistonMove(List<Block> blocks, BlockFace direction) {
+    HashMap<Location, UUID> moving = new HashMap<>();
+    for (Block b : blocks) {
+      Location oldLoc = b.getLocation().toBlockLocation();
+      if (filledCauldronEntities.containsKey(oldLoc)) {
+        UUID id = filledCauldronEntities.remove(oldLoc);
+        Location newLoc = oldLoc.clone().add(direction.getDirection()).toBlockLocation();
+
+        Entity entity = Bukkit.getEntity(id);
+        if (entity != null) {
+          entity.teleport(newLoc.clone().add(0.12, 0.2, 0.12));
+        }
+        moving.put(newLoc, id);
+      }
+    }
+    filledCauldronEntities.putAll(moving);
+  }
+
+  private void removeIceDisplay(Location loc) {
+    UUID id = filledCauldronEntities.remove(loc);
+    if (id != null) {
+      Entity entity = Bukkit.getEntity(id);
+      if (entity != null) entity.remove();
+    }
+  }
+
+  private void createRunner(Block cauldron) {
+    new org.bukkit.scheduler.BukkitRunnable() {
+      @Override
+      public void run() {
+        Location loc = cauldron.getLocation().toBlockLocation();
+        if (fillingCauldrons.contains(loc)) {
+          fillingCauldrons.remove(loc);
+          createIceCauldron(cauldron);
+        }
+      }
+    }.runTaskLater(Main.getInstance(), (new Random().nextInt(5) + 1) * 20L * 20L);
+  }
+
+  private void createIceCauldron(Block cauldron) {
+    cauldron.setType(Material.CAULDRON);
+    Location spawnLoc = cauldron.getLocation().add(0.12, 0.2, 0.12);
+    BlockDisplay display = (BlockDisplay) spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.BLOCK_DISPLAY);
+    display.setBlock(Bukkit.createBlockData(Material.ICE));
+
+    display.setTransformation(new Transformation(
+      new Vector3f(0, 0, 0),
+      new AxisAngle4f(0, 0, 0, 0),
+      new Vector3f(0.75f, 0.8f, 0.75f),
+      new AxisAngle4f(0, 0, 0, 0)
+    ));
+
+    filledCauldronEntities.put(cauldron.getLocation().toBlockLocation(), display.getUniqueId());
+  }
 
   private boolean isFreezingPossible(Biome biome, double height) {
     Biome[] biomesWherePossible = {
@@ -144,5 +238,41 @@ public class CauldronIceListeners implements Listener {
       }
     }
     return false;
+  }
+
+  // --- Save and Load ---
+
+  public static void saveFilledIceCauldrons() {
+    File file = new File(Main.getInstance().getDataFolder(), "filledIceCauldrons.yml");
+    YamlConfiguration config = new YamlConfiguration();
+    int i = 0;
+    for (Map.Entry<Location, UUID> entry : filledCauldronEntities.entrySet()) {
+      config.set("cauldrons." + i + ".location", entry.getKey());
+      config.set("cauldrons." + i + ".uuid", entry.getValue().toString());
+      i++;
+    }
+    try { config.save(file); } catch (IOException e) { e.printStackTrace(); }
+  }
+
+  public static void loadFilledIceCauldrons() {
+    File file = new File(Main.getInstance().getDataFolder(), "filledIceCauldrons.yml");
+    if (!file.exists()) return;
+
+    YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+    if (config.getConfigurationSection("cauldrons") == null) return;
+
+    for (String key : config.getConfigurationSection("cauldrons").getKeys(false)) {
+      try {
+        Location loc = config.getLocation("cauldrons." + key + ".location");
+        String uuidStr = config.getString("cauldrons." + key + ".uuid");
+
+        // Safety check: ensure the location and world actually exist
+        if (loc != null && loc.getWorld() != null && uuidStr != null) {
+          filledCauldronEntities.put(loc.toBlockLocation(), UUID.fromString(uuidStr));
+        }
+      } catch (Exception e) {
+        Bukkit.getLogger().warning("Could not load cauldron entry '" + key + "'. Skipping...");
+      }
+    }
   }
 }

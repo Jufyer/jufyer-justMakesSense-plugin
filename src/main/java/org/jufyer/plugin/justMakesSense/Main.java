@@ -35,6 +35,7 @@ public final class Main extends JavaPlugin implements Listener {
 
       Bukkit.getScheduler().runTaskLater(this, () -> {
         CauldronHoneyListeners.loadFilledHoneyCauldrons();
+        CauldronIceListeners.loadFilledIceCauldrons();
         getLogger().info("Successfully loaded honey cauldrons after world initialization.");
       }, 1L);
     }
@@ -44,6 +45,7 @@ public final class Main extends JavaPlugin implements Listener {
   public void onDisable(){
     if (getCustomConfig().getBoolean("Cauldron rework")){
       CauldronHoneyListeners.saveFilledHoneyCauldrons();
+      CauldronIceListeners.saveFilledIceCauldrons();
     }
   }
 
