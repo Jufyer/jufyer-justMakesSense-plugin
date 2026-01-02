@@ -1,8 +1,0 @@
-api-version: '1.21'
-name: jufyer-justMakesSense-plugin
-version: 1.0.0-SNAPSHOT
-main: org.jufyer.plugin.justMakesSense.Main
-description: JustMakesSense Minecraft Plugin by Jufyer
-load: STARTUP
-authors:
-- Jufyer
