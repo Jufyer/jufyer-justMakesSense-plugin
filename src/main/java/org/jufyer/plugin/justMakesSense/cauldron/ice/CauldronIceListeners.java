@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Hopper;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Entity;
@@ -15,8 +16,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.inventory.HopperInventorySearchEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Transformation;
 import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
@@ -98,6 +103,46 @@ public class CauldronIceListeners implements Listener {
   }
 
   @EventHandler
+  public void onPlayerInteract(PlayerInteractEvent event) {
+    if (event.getClickedBlock() == null || !event.getAction().isRightClick()) return;
+    Location loc = event.getClickedBlock().getLocation().toBlockLocation();
+
+    if (filledCauldronEntities.containsKey(loc)) {
+      event.setCancelled(true); // Prevent normal bucket filling if any
+      event.getPlayer().getInventory().addItem(new ItemStack(Material.ICE));
+      removeIceDisplay(loc);
+      checkAndStartFilling(event.getClickedBlock());
+    }
+  }
+
+  @EventHandler
+  public void onHopperInventorySearch(HopperInventorySearchEvent event) {
+    Location cauldronLoc = event.getBlock().getLocation().add(0, 1, 0).toBlockLocation();
+
+    if (filledCauldronEntities.containsKey(cauldronLoc)) {
+      if (event.getBlock().getState() instanceof Hopper hopper) {
+        Inventory inv = hopper.getInventory();
+        if (inv.addItem(new ItemStack(Material.ICE)).isEmpty()) {
+          removeIceDisplay(cauldronLoc);
+          checkAndStartFilling(cauldronLoc.getBlock());
+        }
+      }
+    }
+  }
+
+  private void checkAndStartFilling(Block cauldron) {
+    if (isFreezingPossible(cauldron.getBiome(), cauldron.getLocation().getZ())) {
+      if (cauldron.getType() == Material.WATER_CAULDRON) {
+        if (!filledCauldronEntities.containsKey(cauldron.getLocation().toBlockLocation()) &&
+          !fillingCauldrons.contains(cauldron.getLocation().toBlockLocation())) {
+          fillingCauldrons.add(cauldron.getLocation().toBlockLocation());
+          createRunner(cauldron);
+        }
+      }
+    }
+  }
+
+  @EventHandler
   public void onBlockPistonExtend(BlockPistonExtendEvent event) {
     handlePistonMove(event.getBlocks(), event.getDirection());
   }
@@ -143,7 +188,7 @@ public class CauldronIceListeners implements Listener {
           createIceCauldron(cauldron);
         }
       }
-    }.runTaskLater(Main.getInstance(), (new Random().nextInt(5) + 1) * 20L * 20L);
+    }.runTaskLater(Main.getInstance(), /*(new Random().nextInt(5) + 1) * 20L * 20L*/5);
   }
 
   private void createIceCauldron(Block cauldron) {
