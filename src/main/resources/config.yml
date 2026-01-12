@@ -1,4 +1,20 @@
-# Enable or Disable features.
-# If you write "true" behind a feature then it will be activated.
-# If you write "false" behind it the feature will be disabled.
+# Cauldron Rework Configuration
+# ----------------------------
 
+# General cauldron mechanics
+cauldrons:
+  enable-ice: true
+  enable-honey: true
+  enable-remove-dye: true
+
+# Settings for dispenser-to-cauldron interactions
+dispenser-interaction:
+  allow-from-below: true
+  enable-water: true
+  enable-lava: true
+  enable-powder-snow: true
+
+# Miscellaneous gameplay tweaks
+mechanics:
+  # Glistering Melons become edible and give a short regeneration effect
+  edible-glistering-melon: true

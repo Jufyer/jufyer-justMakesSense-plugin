@@ -30,7 +30,7 @@ import java.util.*;
 public class CauldronHoneyListeners implements Listener {
 
   private final List<Location> fillingCauldrons = new ArrayList<>();
-  private static final HashMap<Location, UUID> filledCauldronEntities = new HashMap<>();
+  public static final HashMap<Location, UUID> filledHoneyCauldronEntities = new HashMap<>();
   private final int checkRange = 10;
 
   @EventHandler
@@ -47,7 +47,7 @@ public class CauldronHoneyListeners implements Listener {
   private void checkAndStartFilling(Block cauldron) {
     Block hive = getBlockAbove(cauldron.getLocation(), checkRange, Material.BEE_NEST, Material.BEEHIVE);
     if (hive != null && getHoney(hive) >= 5) {
-      if (!filledCauldronEntities.containsKey(cauldron.getLocation().toBlockLocation()) &&
+      if (!filledHoneyCauldronEntities.containsKey(cauldron.getLocation().toBlockLocation()) &&
         !fillingCauldrons.contains(cauldron.getLocation().toBlockLocation())) {
         fillingCauldrons.add(cauldron.getLocation().toBlockLocation());
         createRunner(cauldron);
@@ -77,7 +77,7 @@ public class CauldronHoneyListeners implements Listener {
     if (event.getClickedBlock() == null || !event.getAction().isRightClick()) return;
     Location loc = event.getClickedBlock().getLocation().toBlockLocation();
 
-    if (filledCauldronEntities.containsKey(loc)) {
+    if (filledHoneyCauldronEntities.containsKey(loc)) {
       event.setCancelled(true); // Prevent normal bucket filling if any
       event.getPlayer().getInventory().addItem(new ItemStack(Material.HONEY_BLOCK));
       removeHoneyDisplay(loc);
@@ -89,7 +89,7 @@ public class CauldronHoneyListeners implements Listener {
   public void onHopperInventorySearch(HopperInventorySearchEvent event) {
     Location cauldronLoc = event.getBlock().getLocation().add(0, 1, 0).toBlockLocation();
 
-    if (filledCauldronEntities.containsKey(cauldronLoc)) {
+    if (filledHoneyCauldronEntities.containsKey(cauldronLoc)) {
       if (event.getBlock().getState() instanceof Hopper hopper) {
         Inventory inv = hopper.getInventory();
         if (inv.addItem(new ItemStack(Material.HONEY_BLOCK)).isEmpty()) {
@@ -114,8 +114,8 @@ public class CauldronHoneyListeners implements Listener {
     HashMap<Location, UUID> moving = new HashMap<>();
     for (Block b : blocks) {
       Location oldLoc = b.getLocation().toBlockLocation();
-      if (filledCauldronEntities.containsKey(oldLoc)) {
-        UUID id = filledCauldronEntities.remove(oldLoc);
+      if (filledHoneyCauldronEntities.containsKey(oldLoc)) {
+        UUID id = filledHoneyCauldronEntities.remove(oldLoc);
         Location newLoc = oldLoc.clone().add(direction.getDirection()).toBlockLocation();
 
         Entity entity = Bukkit.getEntity(id);
@@ -125,11 +125,11 @@ public class CauldronHoneyListeners implements Listener {
         moving.put(newLoc, id);
       }
     }
-    filledCauldronEntities.putAll(moving);
+    filledHoneyCauldronEntities.putAll(moving);
   }
 
   private void removeHoneyDisplay(Location loc) {
-    UUID id = filledCauldronEntities.remove(loc);
+    UUID id = filledHoneyCauldronEntities.remove(loc);
     if (id != null) {
       Entity entity = Bukkit.getEntity(id);
       if (entity != null) entity.remove();
@@ -161,7 +161,7 @@ public class CauldronHoneyListeners implements Listener {
       new AxisAngle4f(0, 0, 0, 0)
     ));
 
-    filledCauldronEntities.put(cauldron.getLocation().toBlockLocation(), display.getUniqueId());
+    filledHoneyCauldronEntities.put(cauldron.getLocation().toBlockLocation(), display.getUniqueId());
   }
 
   // --- Utility Methods ---
@@ -195,7 +195,7 @@ public class CauldronHoneyListeners implements Listener {
     File file = new File(Main.getInstance().getDataFolder(), "filledHoneyCauldrons.yml");
     YamlConfiguration config = new YamlConfiguration();
     int i = 0;
-    for (Map.Entry<Location, UUID> entry : filledCauldronEntities.entrySet()) {
+    for (Map.Entry<Location, UUID> entry : filledHoneyCauldronEntities.entrySet()) {
       config.set("cauldrons." + i + ".location", entry.getKey());
       config.set("cauldrons." + i + ".uuid", entry.getValue().toString());
       i++;
@@ -217,7 +217,7 @@ public class CauldronHoneyListeners implements Listener {
 
         // Safety check: ensure the location and world actually exist
         if (loc != null && loc.getWorld() != null && uuidStr != null) {
-          filledCauldronEntities.put(loc.toBlockLocation(), UUID.fromString(uuidStr));
+          filledHoneyCauldronEntities.put(loc.toBlockLocation(), UUID.fromString(uuidStr));
         }
       } catch (Exception e) {
         Bukkit.getLogger().warning("Could not load cauldron entry '" + key + "'. Skipping...");
