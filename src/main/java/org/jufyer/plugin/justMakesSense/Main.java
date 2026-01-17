@@ -1,15 +1,12 @@
 package org.jufyer.plugin.justMakesSense;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.block.Hopper;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.EventHandler;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.event.Listener;
-import org.bukkit.event.server.ServerLoadEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jufyer.plugin.justMakesSense.banner.bannerOnBeds.BannerOnBedsListeners;
 import org.jufyer.plugin.justMakesSense.banner.bannerOnBoats.BannerOnBoatsListeners;
@@ -17,29 +14,29 @@ import org.jufyer.plugin.justMakesSense.cauldron.dispenser.CauldronDispenserList
 import org.jufyer.plugin.justMakesSense.cauldron.honey.CauldronHoneyListeners;
 import org.jufyer.plugin.justMakesSense.cauldron.ice.CauldronIceListeners;
 import org.jufyer.plugin.justMakesSense.cauldron.removeDye.CauldronRemoveDyeListeners;
+import org.jufyer.plugin.justMakesSense.copperHoppper.HopperBlockEntity;
 import org.jufyer.plugin.justMakesSense.copperHoppper.HopperRegistry;
+import org.jufyer.plugin.justMakesSense.copperHoppper.listener.CopperHopperBlockListener;
+import org.jufyer.plugin.justMakesSense.copperHoppper.listener.CopperHopperItemListener;
 import org.jufyer.plugin.justMakesSense.glisteringMelon.GlisteringMelonEatListeners;
-import org.jufyer.plugin.justMakesSense.recpies.api.RecipeType;
-import org.jufyer.plugin.justMakesSense.recpies.api.RecipesAPI;
-import org.jufyer.plugin.justMakesSense.recpies.impl.domains.ItemRecipe;
-import org.jufyer.plugin.justMakesSense.recpies.impl.domains.recipes.RecipeBuilder;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class Main extends JavaPlugin implements Listener {
 
-  private FileConfiguration customConfig;
   private static Main instance;
   public static Main getInstance() {
     return instance;
   }
 
-  public static final int CMDWhiteBoatBanner = 23821521;
+  public static Set<Location> loadedCopperHoppers = new HashSet<>();
+  public static Set<Chunk> scannedChunks = new HashSet<>();
 
-  private RecipesAPI recipesAPI;
+  public static HashMap<Hopper, ItemDisplay> copperHoppers = new HashMap<>();
+
+  public static final int CMDWhiteBoatBanner = 23821521;
 
   @Override
   public void onEnable() {
@@ -73,6 +70,7 @@ public final class Main extends JavaPlugin implements Listener {
 
       if (getCustomConfig().getBoolean("enable-remove-dye-cauldrons")) {
         Bukkit.getPluginManager().registerEvents(new CauldronRemoveDyeListeners(), this);
+        getLogger().info("Remove-Dye cauldrons enabled");
       }
 
       Bukkit.getPluginManager().registerEvents(new CauldronDispenserListeners(), this);
@@ -80,22 +78,34 @@ public final class Main extends JavaPlugin implements Listener {
     // Glistering Melon
       if (getCustomConfig().getBoolean("enable-edible-glistering-melon")) {
         Bukkit.getPluginManager().registerEvents(new GlisteringMelonEatListeners(), this);
+        getLogger().info("Edible Glistering Melons enabled");
       }
 
     // Banner
-      Bukkit.getPluginManager().registerEvents(new BannerOnBoatsListeners(), this);
-      Bukkit.getPluginManager().registerEvents(new BannerOnBedsListeners(), this);
+      if (getCustomConfig().getBoolean("banner-on-boats")) {
+        Bukkit.getPluginManager().registerEvents(new BannerOnBoatsListeners(), this);
+        getLogger().info("Banner on boats enabled");
+      }
+      if (getCustomConfig().getBoolean("banner-on-beds")) {
+        Bukkit.getPluginManager().registerEvents(new BannerOnBedsListeners(), this);
+        getLogger().info("Banner on beds enabled");
+      }
 
-    recipesAPI = new RecipesAPI(this, true);
-    //TODO: Customize
-    ItemRecipe recipe1 = new RecipeBuilder()
-      .setType(RecipeType.CRAFTING_SHAPELESS)
-      .setName("example-simple")
-      .setResult(new ItemStack(Material.DIAMOND))
-      .setAmount(64)
-      .addIngredient(Material.DIRT)
-      .build();
-    recipesAPI.addRecipe(recipe1);
+    // Copper Hopper
+    if (getCustomConfig().getBoolean("copper-hopper")) {
+      HopperRegistry.loadHopperWithItemDisplay();
+
+      HopperRegistry.createCopperHopperItems();
+      HopperRegistry.addCopperHopperRecipes();
+
+      getServer().getPluginManager().registerEvents(new CopperHopperItemListener(), this);
+      getServer().getPluginManager().registerEvents(new CopperHopperBlockListener(), this);
+
+      getServer().getPluginManager().registerEvents(new HopperBlockEntity(), this);
+      HopperBlockEntity.createRunner();
+
+      getLogger().info("Copper hopper enabled");
+    }
   }
 
   @Override
@@ -110,51 +120,12 @@ public final class Main extends JavaPlugin implements Listener {
     if (getCustomConfig().getBoolean("enable-honey-cauldrons")) {
       CauldronHoneyListeners.saveFilledHoneyCauldrons();
     }
+    if (getCustomConfig().getBoolean("copper-hopper")) {
+      HopperRegistry.saveHopperWithItemDisplay();
+    }
   }
 
   public FileConfiguration getCustomConfig() {
-    return this.customConfig;
-  }
-
-  private void createCustomConfig() {
-    File customConfigFile = new File(getDataFolder(), "config.yml");
-    if (!customConfigFile.exists()) {
-      getDataFolder().mkdirs();
-      try {
-        customConfigFile.createNewFile();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
-    customConfig = new YamlConfiguration();
-
-    try {
-      customConfig.load(customConfigFile);
-      customConfig.options().copyDefaults(true);
-
-      //TODO: Add comments to config file
-
-      //Ice Cauldron
-      customConfig.addDefault("enable-ice-cauldrons", true);
-
-      //Honey Cauldron
-      customConfig.addDefault("enable-honey-cauldrons", true);
-
-      //Dispenser cauldron
-      customConfig.addDefault("allow-interaction-from-below", true);
-      customConfig.addDefault("enable-water", true);
-      customConfig.addDefault("enable-lava", true);
-      customConfig.addDefault("enable-powder-snow", true);
-
-      //Remove dye cauldron
-      customConfig.addDefault("enable-remove-dye-cauldrons", true);
-
-      //Glistering Melon edible
-      customConfig.addDefault("enable-edible-glistering-melon", true);
-
-      customConfig.save(customConfigFile);
-    } catch (IOException | InvalidConfigurationException e) {
-      e.printStackTrace();
-    }
+    return this.getConfig();
   }
 }

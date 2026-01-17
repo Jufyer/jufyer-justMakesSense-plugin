@@ -42,11 +42,11 @@ public class Updater {
      * Check if the plugin is up to date and log a warning if it's not
      */
     private void checkUpdates() {
-        if(!this.isUpToDate()) {
-            Logger.getLogger(name)
-                    .warning("The API is not up to date, " +
-                            "the latest version is " + this.fetchLatestVersion());
-        }
+//        if(!this.isUpToDate()) {
+//            Logger.getLogger(name)
+//                    .warning("The API is not up to date, " +
+//                            "the latest version is " + this.fetchLatestVersion());
+//        }
     }
 
     /**

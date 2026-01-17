@@ -48,6 +48,6 @@ bukkitPluginYaml {
   authors.add("Jufyer")
   apiVersion = "1.21"
   commands {
-
+    register("test")
   }
 }

@@ -1,0 +1,33 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [512, 512],
+	"textures": {
+		"0": "item/ocean_glider_entity",
+		"particle": "item/ocean_glider_entity"
+	},
+	"elements": [
+		{
+			"from": [1, 0, -6],
+			"to": [15, 1, 22],
+			"faces": {
+				"north": {"uv": [2.9858, 5.77083, 0, 5.8125], "texture": "#0"},
+				"east": {"uv": [4.2358, 1.1875, 5.45455, 4.125], "texture": "#0"},
+				"south": {"uv": [2.88068, 5.73958, 0.09375, 5.94792], "texture": "#0"},
+				"west": {"uv": [3.82102, 0.9375, 5.39773, 4.27083], "texture": "#0"},
+				"up": {"uv": [0, 0, 2.9858, 5.52083], "texture": "#0"},
+				"down": {"uv": [3.45739, 0, 5.40341, 4.82291], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 0, -10],
+			"translation": [-8.5, -2, -4],
+			"scale": [0.83, 1, 0.83]
+		},
+		"head": {
+			"translation": [0, -80, 0],
+			"scale": [1.31, 1, 1.31]
+		}
+	}
+}

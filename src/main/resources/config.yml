@@ -7,6 +7,9 @@ cauldrons:
   enable-honey: true
   enable-remove-dye: true
 
+# Copper Hopper
+copper-hopper: true
+
 # Settings for dispenser-to-cauldron interactions
 dispenser-interaction:
   allow-from-below: true
@@ -18,3 +21,5 @@ dispenser-interaction:
 mechanics:
   # Glistering Melons become edible and give a short regeneration effect
   edible-glistering-melon: true
+  banner-on-boats: true
+  banner-on-beds: true

@@ -59,13 +59,11 @@ public class CauldronHoneyListeners implements Listener {
   public void onBlockBreak(BlockBreakEvent event) {
     Location loc = event.getBlock().getLocation().toBlockLocation();
 
-    // If the cauldron is broken
     if (event.getBlock().getType() == Material.CAULDRON) {
       removeHoneyDisplay(loc);
       fillingCauldrons.remove(loc);
     }
 
-    // If a hive above is broken, stop the filling process if needed
     if (event.getBlock().getType() == Material.BEE_NEST || event.getBlock().getType() == Material.BEEHIVE) {
       Block cauldron = getBlockBelow(loc, checkRange, Material.CAULDRON);
       if (cauldron != null) fillingCauldrons.remove(cauldron.getLocation().toBlockLocation());
@@ -78,7 +76,7 @@ public class CauldronHoneyListeners implements Listener {
     Location loc = event.getClickedBlock().getLocation().toBlockLocation();
 
     if (filledHoneyCauldronEntities.containsKey(loc)) {
-      event.setCancelled(true); // Prevent normal bucket filling if any
+      event.setCancelled(true);
       event.getPlayer().getInventory().addItem(new ItemStack(Material.HONEY_BLOCK));
       removeHoneyDisplay(loc);
       checkAndStartFilling(event.getClickedBlock());
@@ -215,7 +213,6 @@ public class CauldronHoneyListeners implements Listener {
         Location loc = config.getLocation("cauldrons." + key + ".location");
         String uuidStr = config.getString("cauldrons." + key + ".uuid");
 
-        // Safety check: ensure the location and world actually exist
         if (loc != null && loc.getWorld() != null && uuidStr != null) {
           filledHoneyCauldronEntities.put(loc.toBlockLocation(), UUID.fromString(uuidStr));
         }
