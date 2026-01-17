@@ -2,24 +2,23 @@
 # ----------------------------
 
 # General cauldron mechanics
-cauldrons:
-  enable-ice: true
-  enable-honey: true
-  enable-remove-dye: true
+enable-ice: true
+enable-honey: true
+enable-remove-dye: true
 
 # Copper Hopper
 copper-hopper: true
 
 # Settings for dispenser-to-cauldron interactions
-dispenser-interaction:
-  allow-from-below: true
-  enable-water: true
-  enable-lava: true
-  enable-powder-snow: true
+allow-from-below: true
+enable-water: true
+enable-lava: true
+enable-powder-snow: true
 
 # Miscellaneous gameplay tweaks
-mechanics:
-  # Glistering Melons become edible and give a short regeneration effect
-  edible-glistering-melon: true
-  banner-on-boats: true
-  banner-on-beds: true
+
+# Glistering Melons become edible and give a short regeneration effect
+enable-edible-glistering-melon: true
+
+banner-on-boats: true
+banner-on-beds: true

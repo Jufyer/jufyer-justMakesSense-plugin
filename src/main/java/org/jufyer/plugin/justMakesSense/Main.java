@@ -31,6 +31,15 @@ public final class Main extends JavaPlugin implements Listener {
     return instance;
   }
 
+  //Banner on boats
+  // https://download.mc-packs.net/pack/71d29e4e502078d9fc7fc8846b55be9c8fb13471.zip
+  // 71d29e4e502078d9fc7fc8846b55be9c8fb13471
+
+  //Copper Hoppers
+  // https://download.mc-packs.net/pack/8dc9547f7273b0d2b8d24987d1c758b1eb74dfac.zip
+  // 8dc9547f7273b0d2b8d24987d1c758b1eb74dfac
+
+
   public static Set<Location> loadedCopperHoppers = new HashSet<>();
   public static Set<Chunk> scannedChunks = new HashSet<>();
 
@@ -44,6 +53,7 @@ public final class Main extends JavaPlugin implements Listener {
     saveDefaultConfig();
     //createCustomConfig();
 
+    Bukkit.getPluginManager().registerEvents(new ResourcePackListeners(), this);
     getLogger().info("The following features are enabled: ");
 
     // Cauldron Rework

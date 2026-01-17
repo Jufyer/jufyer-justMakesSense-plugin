@@ -163,19 +163,18 @@ public class BannerOnBoatsListeners implements Listener {
     }
   }
 
-  @EventHandler
-  public void onPlayerJoin(PlayerJoinEvent event) {
-    Player player = event.getPlayer();
+//  @EventHandler
+//  public void onPlayerJoin(PlayerJoinEvent event) {
+//    Player player = event.getPlayer();
+//
+//    Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
+//      if (player.isOnline()) {
+//        sendModernResourcePack(player);
+//      }
+//    }, 10L);
+//  }
 
-    Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
-      if (player.isOnline()) {
-        sendModernResourcePack(player);
-      }
-    }, 10L);
-  }
-
-  public void sendModernResourcePack(Player player) {
-    //TODO: Rmove Comments but keep code...
+//  public void sendModernResourcePack(Player player) {
 //    ResourcePackInfo packInfo = ResourcePackInfo.resourcePackInfo()
 //      .id(UUID.randomUUID())
 //      .uri(URI.create("https://download.mc-packs.net/pack/1a58c4e4d70af41c60b44dc9a2f298f894865ce8.zip"))
@@ -189,5 +188,5 @@ public class BannerOnBoatsListeners implements Listener {
 //      .build();
 //
 //    player.sendResourcePacks(request);
-  }
+//  }
 }
