@@ -244,11 +244,14 @@ public class CopperHopperBlockListener implements Listener {
 //    }
 //  }
 
-  private void oxidationCheck(Hopper hopper) {
+  public static void oxidationCheck(Hopper hopper) {
     Random random = new Random();
 
+    if (new Random().nextInt(1365) != 0) return;
+
     // 1. Früher Abbruch (Performance-Boost)
-    if (random.nextInt(1125) >= 64) return;
+    int randInteger = random.nextInt(1125);
+    if (randInteger >= 64) return;
 
     Location loc = hopper.getLocation();
     World world = loc.getWorld();
@@ -289,9 +292,12 @@ public class CopperHopperBlockListener implements Listener {
     nonWaxed++;
     nonWaxedHigher++;
 
-    double base = nonWaxed / nonWaxedHigher;
-    double modifier = (currentVariant == CopperVariant.NORMAL) ? 0.75 : 1.0;
-    double chance = base * (modifier * modifier);
+    double a = nonWaxed;
+    double b = nonWaxedHigher;
+    double c = (b + 1.0) / (a + 1.0);
+    double m = (currentVariant == CopperVariant.NORMAL) ? 0.75 : 1.0;
+
+    double chance = m * (c * c); // Formel: mc^2
 
     if (random.nextDouble() < chance) {
       updateToNextStage(hopper, currentVariant);
@@ -320,7 +326,7 @@ public class CopperHopperBlockListener implements Listener {
   }
 
   /* Helper Methods */
-  private boolean isWaxed(CopperVariant variant) {
+  private static boolean isWaxed(CopperVariant variant) {
 
       if (variant.equals(CopperVariant.WAXED) || variant.equals(CopperVariant.WAXED_EXPOSED) || variant.equals(CopperVariant.WAXED_WEATHERED) || variant.equals(CopperVariant.WAXED_OXIDIZED)) {
         return true;
@@ -342,7 +348,7 @@ public class CopperHopperBlockListener implements Listener {
     return false;
   }
 
-  private void updateHopperItemDisplayTexture(Hopper hopper, Boolean sideView) {
+  private static void updateHopperItemDisplayTexture(Hopper hopper, Boolean sideView) {
     if (Main.copperHoppers.get(hopper) != null) {
       ItemDisplay display = Main.copperHoppers.get(hopper);
       ItemStack itemStack = display.getItemStack();
@@ -371,7 +377,7 @@ public class CopperHopperBlockListener implements Listener {
   }
 
   // Hilfsmethode um PDC-Iterationen zu vermeiden
-  private CopperVariant getCopperVariant(Hopper hopper) {
+  private static CopperVariant getCopperVariant(Hopper hopper) {
     for (CopperVariant variant : CopperVariant.values()) {
       if (hopper.getPersistentDataContainer().has(variant.getBlockKey(), PersistentDataType.INTEGER)) {
         return variant;
@@ -380,7 +386,7 @@ public class CopperHopperBlockListener implements Listener {
     return null;
   }
 
-  private void updateToNextStage(Hopper hopper, CopperVariant current) {
+  private static void updateToNextStage(Hopper hopper, CopperVariant current) {
     CopperVariant next = null;
     if (current == CopperVariant.NORMAL) next = CopperVariant.EXPOSED;
     else if (current == CopperVariant.EXPOSED) next = CopperVariant.WEATHERED;

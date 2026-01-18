@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Hopper;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
@@ -98,17 +99,27 @@ public class CopperHopperItemListener implements Listener {
   @EventHandler
   public void onBlockBreak(BlockBreakEvent event) {
     if (event.getBlock().getType().equals(Material.HOPPER)) {
-      Location blockLoc = event.getBlock().getLocation();
-      for (ItemDisplay itemDisplay : blockLoc.getWorld().getEntitiesByClass(ItemDisplay.class)) {
-        if (itemDisplay.getLocation().getBlockX() == blockLoc.getBlockX() &&
-          itemDisplay.getLocation().getBlockY() == blockLoc.getBlockY() &&
-          itemDisplay.getLocation().getBlockZ() == blockLoc.getBlockZ()) {
-          for (CopperVariant variant : CopperVariant.values()) {
-            ItemMeta meta = itemDisplay.getItemStack().getItemMeta();
-            if (meta != null && meta.getPersistentDataContainer().has(variant.getItemKey())) {
-              itemDisplay.remove();
-              itemDisplay.getWorld().dropItemNaturally(itemDisplay.getLocation(), HopperRegistry.CopperHopperItem1to1(variant));
-            }
+//      Location blockLoc = event.getBlock().getLocation();
+//      for (ItemDisplay itemDisplay : blockLoc.getWorld().getEntitiesByClass(ItemDisplay.class)) {
+//        if (itemDisplay.getLocation().getBlockX() == blockLoc.getBlockX() &&
+//          itemDisplay.getLocation().getBlockY() == blockLoc.getBlockY() &&
+//          itemDisplay.getLocation().getBlockZ() == blockLoc.getBlockZ()) {
+//          for (CopperVariant variant : CopperVariant.values()) {
+//            ItemMeta meta = itemDisplay.getItemStack().getItemMeta();
+//            if (meta != null && meta.getPersistentDataContainer().has(variant.getItemKey())) {
+//              itemDisplay.remove();
+//              itemDisplay.getWorld().dropItemNaturally(itemDisplay.getLocation(), HopperRegistry.CopperHopperItem1to1(variant));
+//            }
+//          }
+//        }
+//      }
+      Hopper hopper = (Hopper) event.getBlock().getState();
+      if (Main.copperHoppers.containsKey(hopper)) {
+        for (CopperVariant variant : CopperVariant.values()) {
+          if (hopper.getPersistentDataContainer().has(variant.getBlockKey())) {
+            Main.copperHoppers.get(hopper).remove();
+            Main.copperHoppers.remove(hopper);
+            hopper.getLocation().getWorld().dropItemNaturally(hopper.getLocation(), HopperRegistry.CopperHopperItem1to1(variant));
           }
         }
       }

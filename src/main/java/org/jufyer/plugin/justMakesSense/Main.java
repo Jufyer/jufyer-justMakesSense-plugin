@@ -8,7 +8,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jufyer.plugin.justMakesSense.banner.bannerOnBeds.BannerOnBedsListeners;
 import org.jufyer.plugin.justMakesSense.banner.bannerOnBoats.BannerOnBoatsListeners;
 import org.jufyer.plugin.justMakesSense.cauldron.dispenser.CauldronDispenserListeners;
 import org.jufyer.plugin.justMakesSense.cauldron.honey.CauldronHoneyListeners;
@@ -19,6 +18,8 @@ import org.jufyer.plugin.justMakesSense.copperHoppper.HopperRegistry;
 import org.jufyer.plugin.justMakesSense.copperHoppper.listener.CopperHopperBlockListener;
 import org.jufyer.plugin.justMakesSense.copperHoppper.listener.CopperHopperItemListener;
 import org.jufyer.plugin.justMakesSense.glisteringMelon.GlisteringMelonEatListeners;
+import org.jufyer.plugin.justMakesSense.goat.GoatDropMuttonListener;
+import org.jufyer.plugin.justMakesSense.husk.HuskDropSandListener;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,6 +45,7 @@ public final class Main extends JavaPlugin implements Listener {
   public static Set<Chunk> scannedChunks = new HashSet<>();
 
   public static HashMap<Hopper, ItemDisplay> copperHoppers = new HashMap<>();
+  public static HashMap<Hopper, Integer> copperHopperItemCount = new HashMap<>();
 
   public static final int CMDWhiteBoatBanner = 23821521;
 
@@ -96,14 +98,13 @@ public final class Main extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new BannerOnBoatsListeners(), this);
         getLogger().info("Banner on boats enabled");
       }
-      if (getCustomConfig().getBoolean("banner-on-beds")) {
-        Bukkit.getPluginManager().registerEvents(new BannerOnBedsListeners(), this);
-        getLogger().info("Banner on beds enabled");
-      }
 
     // Copper Hopper
     if (getCustomConfig().getBoolean("copper-hopper")) {
-      HopperRegistry.loadHopperWithItemDisplay();
+      Bukkit.getScheduler().runTaskLater(this, () -> {
+        HopperRegistry.loadHopperWithItemDisplay();
+        getLogger().info("Successfully loaded copper hoppers after world initialization.");
+      }, 1L);
 
       HopperRegistry.createCopperHopperItems();
       HopperRegistry.addCopperHopperRecipes();
@@ -115,6 +116,18 @@ public final class Main extends JavaPlugin implements Listener {
       HopperBlockEntity.createRunner();
 
       getLogger().info("Copper hopper enabled");
+    }
+
+    // Husks Drop Sand
+    if (getCustomConfig().getBoolean("husks-drop-sand")) {
+      Bukkit.getPluginManager().registerEvents(new HuskDropSandListener(), this);
+      getLogger().info("Husks drop sand enabled");
+    }
+
+    // Goat Drop mutton
+    if (getCustomConfig().getBoolean("goat-drop-mutton")) {
+      Bukkit.getPluginManager().registerEvents(new GoatDropMuttonListener(), this);
+      getLogger().info("Goat drop mutton enabled");
     }
   }
 
