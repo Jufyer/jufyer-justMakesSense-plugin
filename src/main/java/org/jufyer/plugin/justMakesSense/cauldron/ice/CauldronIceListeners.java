@@ -107,10 +107,12 @@ public class CauldronIceListeners implements Listener {
     Location loc = event.getClickedBlock().getLocation().toBlockLocation();
 
     if (filledIceCauldronEntities.containsKey(loc)) {
-      event.setCancelled(true); // Prevent normal bucket filling if any
-      event.getPlayer().getInventory().addItem(new ItemStack(Material.ICE));
+
+      loc.getWorld().dropItemNaturally(loc.clone().add(0, 1.5, 0), new ItemStack(Material.ICE));
+
       removeIceDisplay(loc);
       checkAndStartFilling(event.getClickedBlock());
+      event.setCancelled(true);
     }
   }
 

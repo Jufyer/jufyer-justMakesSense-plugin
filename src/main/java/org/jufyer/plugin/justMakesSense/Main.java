@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Hopper;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ItemDisplay;
+import org.bukkit.entity.Shulker;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jufyer.plugin.justMakesSense.banner.bannerOnBoats.BannerOnBoatsListeners;
@@ -44,8 +45,8 @@ public final class Main extends JavaPlugin implements Listener {
   public static Set<Location> loadedCopperHoppers = new HashSet<>();
   public static Set<Chunk> scannedChunks = new HashSet<>();
 
-  public static HashMap<Hopper, ItemDisplay> copperHoppers = new HashMap<>();
-  public static HashMap<Hopper, Integer> copperHopperItemCount = new HashMap<>();
+  public static HashMap<Location, ItemDisplay> copperHoppers = new HashMap<>();
+  public static HashMap<Location, Integer> copperHopperItemCount = new HashMap<>();
 
   public static final int CMDWhiteBoatBanner = 23821521;
 
@@ -60,44 +61,44 @@ public final class Main extends JavaPlugin implements Listener {
 
     // Cauldron Rework
 
-      if (getCustomConfig().getBoolean("enable-ice-cauldrons")){
-        getLogger().info("Ice cauldrons enabled");
-        Bukkit.getPluginManager().registerEvents(new CauldronIceListeners(), this);
+    if (getCustomConfig().getBoolean("enable-ice")){
+      getLogger().info("Ice cauldrons enabled");
+      Bukkit.getPluginManager().registerEvents(new CauldronIceListeners(), this);
 
-        Bukkit.getScheduler().runTaskLater(this, () -> {
-          CauldronIceListeners.loadFilledIceCauldrons();
-          getLogger().info("Successfully loaded ice cauldrons after world initialization.");
-        }, 1L);
-      }
+      Bukkit.getScheduler().runTaskLater(this, () -> {
+        CauldronIceListeners.loadFilledIceCauldrons();
+        getLogger().info("Successfully loaded ice cauldrons after world initialization.");
+      }, 1L);
+    }
 
-      if (getCustomConfig().getBoolean("enable-honey-cauldrons")) {
-        getLogger().info("Honey cauldrons enabled");
-        Bukkit.getPluginManager().registerEvents(new CauldronHoneyListeners(), this);
+    if (getCustomConfig().getBoolean("enable-honey")) {
+      getLogger().info("Honey cauldrons enabled");
+      Bukkit.getPluginManager().registerEvents(new CauldronHoneyListeners(), this);
 
-        Bukkit.getScheduler().runTaskLater(this, () -> {
-          CauldronHoneyListeners.loadFilledHoneyCauldrons();
-          getLogger().info("Successfully loaded honey cauldrons after world initialization.");
-        }, 1L);
-      }
+      Bukkit.getScheduler().runTaskLater(this, () -> {
+        CauldronHoneyListeners.loadFilledHoneyCauldrons();
+        getLogger().info("Successfully loaded honey cauldrons after world initialization.");
+      }, 1L);
+    }
 
-      if (getCustomConfig().getBoolean("enable-remove-dye-cauldrons")) {
-        Bukkit.getPluginManager().registerEvents(new CauldronRemoveDyeListeners(), this);
-        getLogger().info("Remove-Dye cauldrons enabled");
-      }
+    if (getCustomConfig().getBoolean("enable-remove-dye")) {
+      Bukkit.getPluginManager().registerEvents(new CauldronRemoveDyeListeners(), this);
+      getLogger().info("Remove-Dye cauldrons enabled");
+    }
 
-      Bukkit.getPluginManager().registerEvents(new CauldronDispenserListeners(), this);
+    Bukkit.getPluginManager().registerEvents(new CauldronDispenserListeners(), this);
 
     // Glistering Melon
-      if (getCustomConfig().getBoolean("enable-edible-glistering-melon")) {
-        Bukkit.getPluginManager().registerEvents(new GlisteringMelonEatListeners(), this);
-        getLogger().info("Edible Glistering Melons enabled");
-      }
+    if (getCustomConfig().getBoolean("enable-edible-glistering-melon")) {
+      Bukkit.getPluginManager().registerEvents(new GlisteringMelonEatListeners(), this);
+      getLogger().info("Edible Glistering Melons enabled");
+    }
 
     // Banner
-      if (getCustomConfig().getBoolean("banner-on-boats")) {
-        Bukkit.getPluginManager().registerEvents(new BannerOnBoatsListeners(), this);
-        getLogger().info("Banner on boats enabled");
-      }
+    if (getCustomConfig().getBoolean("banner-on-boats")) {
+      Bukkit.getPluginManager().registerEvents(new BannerOnBoatsListeners(), this);
+      getLogger().info("Banner on boats enabled");
+    }
 
     // Copper Hopper
     if (getCustomConfig().getBoolean("copper-hopper")) {
@@ -137,10 +138,10 @@ public final class Main extends JavaPlugin implements Listener {
       return;
     }
 
-    if (getCustomConfig().getBoolean("enable-ice-cauldrons")) {
+    if (getCustomConfig().getBoolean("enable-ice")) {
       CauldronIceListeners.saveFilledIceCauldrons();
     }
-    if (getCustomConfig().getBoolean("enable-honey-cauldrons")) {
+    if (getCustomConfig().getBoolean("enable-honey")) {
       CauldronHoneyListeners.saveFilledHoneyCauldrons();
     }
     if (getCustomConfig().getBoolean("copper-hopper")) {

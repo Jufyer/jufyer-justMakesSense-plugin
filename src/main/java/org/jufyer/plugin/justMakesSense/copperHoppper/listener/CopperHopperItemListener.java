@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Hopper;
+import org.bukkit.block.TileState;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jufyer.plugin.justMakesSense.Main;
@@ -36,6 +38,7 @@ public class CopperHopperItemListener implements Listener {
       for (CopperVariant variant : CopperVariant.values()) {
         if (meta != null && meta.getPersistentDataContainer().has(variant.getItemKey())) {
           if (event.getAction().isRightClick()) {
+            if ((!event.getPlayer().isSneaking()) && event.getClickedBlock() != null && event.getClickedBlock().getState() instanceof TileState) return;
             Player player = event.getPlayer();
             long currentTime = System.currentTimeMillis();
 
@@ -86,6 +89,7 @@ public class CopperHopperItemListener implements Listener {
                     event.getItem().setAmount(event.getItem().getAmount() - 1);
                   }
                 }
+                player.swingMainHand();
               }
             } else {
               event.setCancelled(true);
@@ -114,12 +118,13 @@ public class CopperHopperItemListener implements Listener {
 //        }
 //      }
       Hopper hopper = (Hopper) event.getBlock().getState();
-      if (Main.copperHoppers.containsKey(hopper)) {
+      if (Main.copperHoppers.containsKey(hopper.getLocation())) {
         for (CopperVariant variant : CopperVariant.values()) {
           if (hopper.getPersistentDataContainer().has(variant.getBlockKey())) {
-            Main.copperHoppers.get(hopper).remove();
-            Main.copperHoppers.remove(hopper);
+            Main.copperHoppers.get(hopper.getLocation()).remove();
+            Main.copperHoppers.remove(hopper.getLocation());
             hopper.getLocation().getWorld().dropItemNaturally(hopper.getLocation(), HopperRegistry.CopperHopperItem1to1(variant));
+            break;
           }
         }
       }

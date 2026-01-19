@@ -184,6 +184,9 @@ public class HopperRegistry {
 //  }
 
   public static ItemDisplay spawnCopperHopperDisplay(CopperVariant variant, Location location, BlockFace blockFace) {
+    if (location.getBlock().getType() != Material.AIR) return null;
+    if (Main.copperHoppers.containsKey(location)) return null;
+
     ItemStack item = COPPER_ITEMS.get(variant);
     if (item == null || location.getWorld() == null) return null;
 
@@ -205,7 +208,7 @@ public class HopperRegistry {
 
     updateDisplayVisuals(display, variant, blockFace.getOppositeFace());
 
-    Main.copperHoppers.put(hopper, display);
+    Main.copperHoppers.put(hopper.getLocation(), display);
     Main.loadedCopperHoppers.add(hopper.getLocation());
 
     return display;
@@ -318,8 +321,8 @@ public class HopperRegistry {
     YamlConfiguration config = new YamlConfiguration();
 
     int i = 0;
-    for (Map.Entry<Hopper, ItemDisplay> entry : Main.copperHoppers.entrySet()) {
-      Hopper hopper = entry.getKey();
+    for (Map.Entry<Location, ItemDisplay> entry : Main.copperHoppers.entrySet()) {
+      Location hopper = entry.getKey();
       ItemDisplay display = entry.getValue();
 
       config.set("hoppers." + i + ".location", hopper.getBlock().getLocation());
@@ -355,7 +358,7 @@ public class HopperRegistry {
       Entity entity = Bukkit.getEntity(uuid);
 
       if (entity instanceof ItemDisplay itemDisplay) {
-        Main.copperHoppers.put((Hopper) loc.toBlockLocation().getBlock().getState(), itemDisplay);
+        Main.copperHoppers.put(loc, itemDisplay);
         Main.loadedCopperHoppers.add(loc.toBlockLocation());
       }
     }

@@ -9,10 +9,10 @@ enable-remove-dye: true
 # Copper Hopper
 copper-hopper: true
 # Items ejected before the hopper losses its wax layer (0 = never, 1000 = Default)
-copper-hopper-item-count: 1000
+copper-hopper-item-count: 10
 
 # Settings for dispenser-to-cauldron interactions
-allow-from-below: true
+allow-interaction-from-below: true
 enable-water: true
 enable-lava: true
 enable-powder-snow: true
@@ -23,6 +23,5 @@ enable-powder-snow: true
 enable-edible-glistering-melon: true
 
 banner-on-boats: true
-banner-on-beds: true
 husks-drop-sand: true
 goat-drop-mutton: true

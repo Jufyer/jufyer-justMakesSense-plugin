@@ -1,6 +1,5 @@
 package org.jufyer.plugin.justMakesSense.copperHoppper;
 
-import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -21,9 +20,10 @@ import org.jufyer.plugin.justMakesSense.Main;
 import org.jufyer.plugin.justMakesSense.copperHoppper.listener.CopperHopperBlockListener;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HopperBlockEntity implements Listener {
-  private static HashMap<Location, Integer> cooldownHoppers = new HashMap<>();
+  private static ConcurrentHashMap<Location, Integer> cooldownHoppers = new ConcurrentHashMap<>();
 
   public static void createRunner() {
     new org.bukkit.scheduler.BukkitRunnable() {
@@ -31,7 +31,7 @@ public class HopperBlockEntity implements Listener {
       public void run() {
         pushItemsTick();
       }
-    }.runTaskTimer(Main.getInstance(), 20L,1L);
+    }.runTaskTimer(Main.getInstance(), 20L, 1L);
   }
 
   //Run every tick
@@ -93,6 +93,39 @@ public class HopperBlockEntity implements Listener {
   }
 
   public static boolean ejectOneItem(Hopper hopper) {
+    if (!Main.copperHopperItemCount.containsKey(hopper.getLocation())) Main.copperHopperItemCount.put(hopper.getLocation(), 0);
+    int itemCount = Main.copperHopperItemCount.get(hopper.getLocation());
+    if (Main.getInstance().getCustomConfig().getInt("copper-hopper-item-count") > itemCount) {
+      if (Main.copperHopperItemCount.get(hopper.getLocation()) <= Main.getInstance().getCustomConfig().getInt("copper-hopper-item-count")) {
+        for (CopperVariant variant : CopperVariant.values()) {
+          if (isWaxed(variant)) {
+            switch (variant) {
+              case WAXED:
+                hopper.getPersistentDataContainer().remove(variant.getBlockKey());
+                hopper.getPersistentDataContainer().set(CopperVariant.NORMAL.getBlockKey(), PersistentDataType.INTEGER, CopperVariant.NORMAL.getSpeed());
+                hopper.update();
+                break;
+              case WAXED_EXPOSED:
+                hopper.getPersistentDataContainer().remove(variant.getBlockKey());
+                hopper.getPersistentDataContainer().set(CopperVariant.EXPOSED.getBlockKey(), PersistentDataType.INTEGER, CopperVariant.EXPOSED.getSpeed());
+                hopper.update();
+                break;
+              case WAXED_WEATHERED:
+                hopper.getPersistentDataContainer().remove(variant.getBlockKey());
+                hopper.getPersistentDataContainer().set(CopperVariant.WEATHERED.getBlockKey(), PersistentDataType.INTEGER, CopperVariant.WEATHERED.getSpeed());
+                hopper.update();
+                break;
+              case WAXED_OXIDIZED:
+                hopper.getPersistentDataContainer().remove(variant.getBlockKey());
+                hopper.getPersistentDataContainer().set(CopperVariant.OXIDIZED.getBlockKey(), PersistentDataType.INTEGER, CopperVariant.OXIDIZED.getSpeed());
+                hopper.update();
+                break;
+            }
+          }
+        }
+      }
+    }
+
     if (!(hopper.getBlockData() instanceof Directional directional)) {
       return false;
     }
@@ -113,8 +146,6 @@ public class HopperBlockEntity implements Listener {
       ItemStack item = hopperInventory.getItem(slot);
       if (item == null || item.getType().equals(Material.AIR)) continue;
 
-      if (item == null) continue;
-
       InventoryHolder inventoryHolder = (InventoryHolder) targetBlock.getState();
       Inventory targetInventory = inventoryHolder.getInventory();
 
@@ -124,38 +155,12 @@ public class HopperBlockEntity implements Listener {
 
       if (remaining.isEmpty()) {
         item.setAmount(item.getAmount() - 1);
-        Main.copperHopperItemCount.put(hopper, Main.copperHopperItemCount.getOrDefault(hopper, 0) +1);
-        if (Main.getInstance().getCustomConfig().getInt("copper-hopper-item-count") > 0) {
-          if (Main.copperHopperItemCount.get(hopper) >= Main.getInstance().getCustomConfig().getInt("copper-hopper-item-count")) {
-            for (CopperVariant variant : CopperVariant.values()) {
-              switch (variant) {
-                case WAXED:
-                  hopper.getPersistentDataContainer().remove(variant.getBlockKey());
-                  hopper.getPersistentDataContainer().set(CopperVariant.NORMAL.getBlockKey(), PersistentDataType.INTEGER, CopperVariant.NORMAL.getSpeed());
-                  hopper.update();
-                  break;
-                case WAXED_EXPOSED:
-                  hopper.getPersistentDataContainer().remove(variant.getBlockKey());
-                  hopper.getPersistentDataContainer().set(CopperVariant.EXPOSED.getBlockKey(), PersistentDataType.INTEGER, CopperVariant.EXPOSED.getSpeed());
-                  hopper.update();
-                  break;
-                case WAXED_WEATHERED:
-                  hopper.getPersistentDataContainer().remove(variant.getBlockKey());
-                  hopper.getPersistentDataContainer().set(CopperVariant.WEATHERED.getBlockKey(), PersistentDataType.INTEGER, CopperVariant.WEATHERED.getSpeed());
-                  hopper.update();
-                  break;
-                case WAXED_OXIDIZED:
-                  hopper.getPersistentDataContainer().remove(variant.getBlockKey());
-                  hopper.getPersistentDataContainer().set(CopperVariant.OXIDIZED.getBlockKey(), PersistentDataType.INTEGER, CopperVariant.OXIDIZED.getSpeed());
-                  hopper.update();
-                  break;
-              }
-            }
-          }
-        }
+
         // hopper.update();
+
         return true;
-      }else {
+      } else {
+
         continue;
       }
     }
@@ -182,7 +187,7 @@ public class HopperBlockEntity implements Listener {
           itemInSource.setAmount(itemInSource.getAmount() - 1);
           // hopper.update();
           return true;
-        }else {
+        } else {
           continue;
         }
       }
@@ -192,7 +197,7 @@ public class HopperBlockEntity implements Listener {
   }
 
   public static boolean pullOneItemFromFloor(Hopper hopper) {
-    Collection<Entity> entities = hopper.getLocation().getWorld().getNearbyEntities(hopper.getLocation().add(0,1,0), 0.5, 1.0, 0.5);
+    Collection<Entity> entities = hopper.getLocation().getWorld().getNearbyEntities(hopper.getLocation().add(0, 1, 0), 0.5, 1.0, 0.5);
 
     for (Entity entity : entities) {
       if (entity instanceof Item) {
@@ -211,7 +216,7 @@ public class HopperBlockEntity implements Listener {
           itemStack.setAmount(itemStack.getAmount() - 1);
           // hopper.update();
           return true;
-        }else {
+        } else {
           continue;
         }
       }
@@ -237,7 +242,6 @@ public class HopperBlockEntity implements Listener {
       destinationHopper = h;
     }
 
-    // Wenn kein Hopper beteiligt ist → ignorieren
     if (sourceHopper == null && destinationHopper == null) {
       return;
     }
@@ -252,5 +256,16 @@ public class HopperBlockEntity implements Listener {
         return;
       }
     }
+  }
+
+  private static boolean isWaxed(CopperVariant variant) {
+    if (variant.equals(CopperVariant.WAXED)
+      || variant.equals(CopperVariant.WAXED_EXPOSED)
+      || variant.equals(CopperVariant.WAXED_WEATHERED)
+      || variant.equals(CopperVariant.WAXED_OXIDIZED)) {
+      return true;
+    }
+
+    return false;
   }
 }

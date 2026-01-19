@@ -249,7 +249,6 @@ public class CopperHopperBlockListener implements Listener {
 
     if (new Random().nextInt(1365) != 0) return;
 
-    // 1. Früher Abbruch (Performance-Boost)
     int randInteger = random.nextInt(1125);
     if (randInteger >= 64) return;
 
@@ -327,10 +326,12 @@ public class CopperHopperBlockListener implements Listener {
 
   /* Helper Methods */
   private static boolean isWaxed(CopperVariant variant) {
-
-      if (variant.equals(CopperVariant.WAXED) || variant.equals(CopperVariant.WAXED_EXPOSED) || variant.equals(CopperVariant.WAXED_WEATHERED) || variant.equals(CopperVariant.WAXED_OXIDIZED)) {
-        return true;
-      }
+    if (variant.equals(CopperVariant.WAXED)
+      || variant.equals(CopperVariant.WAXED_EXPOSED)
+      || variant.equals(CopperVariant.WAXED_WEATHERED)
+      || variant.equals(CopperVariant.WAXED_OXIDIZED)) {
+      return true;
+    }
 
     return false;
   }
@@ -349,8 +350,8 @@ public class CopperHopperBlockListener implements Listener {
   }
 
   private static void updateHopperItemDisplayTexture(Hopper hopper, Boolean sideView) {
-    if (Main.copperHoppers.get(hopper) != null) {
-      ItemDisplay display = Main.copperHoppers.get(hopper);
+    if (Main.copperHoppers.get(hopper.getLocation()) != null) {
+      ItemDisplay display = Main.copperHoppers.get(hopper.getLocation());
       ItemStack itemStack = display.getItemStack();
       ItemMeta itemMeta = itemStack.getItemMeta();
       Float customModelDataFloat;

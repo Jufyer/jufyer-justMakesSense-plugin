@@ -76,10 +76,11 @@ public class CauldronHoneyListeners implements Listener {
     Location loc = event.getClickedBlock().getLocation().toBlockLocation();
 
     if (filledHoneyCauldronEntities.containsKey(loc)) {
-      event.setCancelled(true);
-      event.getPlayer().getInventory().addItem(new ItemStack(Material.HONEY_BLOCK));
+      loc.getWorld().dropItemNaturally(loc.clone().add(0, 1.5, 0), new ItemStack(Material.HONEY_BLOCK));
+      //event.getPlayer().getInventory().addItem(new ItemStack(Material.HONEY_BLOCK));
       removeHoneyDisplay(loc);
       checkAndStartFilling(event.getClickedBlock());
+      event.setCancelled(true);
     }
   }
 
