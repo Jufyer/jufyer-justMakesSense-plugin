@@ -3,10 +3,8 @@ package org.jufyer.plugin.justMakesSense;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.block.Hopper;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ItemDisplay;
-import org.bukkit.entity.Shulker;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jufyer.plugin.justMakesSense.banner.bannerOnBoats.BannerOnBoatsListeners;
@@ -18,6 +16,9 @@ import org.jufyer.plugin.justMakesSense.copperHoppper.HopperBlockEntity;
 import org.jufyer.plugin.justMakesSense.copperHoppper.HopperRegistry;
 import org.jufyer.plugin.justMakesSense.copperHoppper.listener.CopperHopperBlockListener;
 import org.jufyer.plugin.justMakesSense.copperHoppper.listener.CopperHopperItemListener;
+import org.jufyer.plugin.justMakesSense.dyedTorches.DyedTorchesRegistry;
+import org.jufyer.plugin.justMakesSense.dyedTorches.listener.DyedTorchBlockListener;
+import org.jufyer.plugin.justMakesSense.dyedTorches.listener.DyedTorchItemListener;
 import org.jufyer.plugin.justMakesSense.glisteringMelon.GlisteringMelonEatListeners;
 import org.jufyer.plugin.justMakesSense.goat.GoatDropMuttonListener;
 import org.jufyer.plugin.justMakesSense.husk.HuskDropSandListener;
@@ -44,9 +45,10 @@ public final class Main extends JavaPlugin implements Listener {
 
   public static Set<Location> loadedCopperHoppers = new HashSet<>();
   public static Set<Chunk> scannedChunks = new HashSet<>();
-
   public static HashMap<Location, ItemDisplay> copperHoppers = new HashMap<>();
   public static HashMap<Location, Integer> copperHopperItemCount = new HashMap<>();
+
+  public static HashMap<Location, ItemDisplay> dyedTorches = new HashMap<>();
 
   public static final int CMDWhiteBoatBanner = 23821521;
 
@@ -130,6 +132,20 @@ public final class Main extends JavaPlugin implements Listener {
       Bukkit.getPluginManager().registerEvents(new GoatDropMuttonListener(), this);
       getLogger().info("Goat drop mutton enabled");
     }
+
+    // Dyed torches
+    if (getCustomConfig().getBoolean("dyed-torches")) {
+      DyedTorchesRegistry.createDyedTorchItems();
+      DyedTorchesRegistry.addDyedTorchRecipes();
+
+      Bukkit.getPluginManager().registerEvents(new DyedTorchBlockListener(), this);
+      Bukkit.getPluginManager().registerEvents(new DyedTorchItemListener(), this);
+
+      Bukkit.getScheduler().runTaskLater(this, () -> {
+        DyedTorchesRegistry.loadDyedTorchWithItemDisplay();
+        getLogger().info("Successfully loaded dyed torches after world initialization.");
+      }, 1L);
+    }
   }
 
   @Override
@@ -146,6 +162,9 @@ public final class Main extends JavaPlugin implements Listener {
     }
     if (getCustomConfig().getBoolean("copper-hopper")) {
       HopperRegistry.saveHopperWithItemDisplay();
+    }
+    if (getCustomConfig().getBoolean("dyed-torches")) {
+      DyedTorchesRegistry.saveDyedTorchWithItemDisplay();
     }
   }
 
