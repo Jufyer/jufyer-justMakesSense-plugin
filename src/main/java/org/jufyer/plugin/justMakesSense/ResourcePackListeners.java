@@ -40,6 +40,13 @@ public class ResourcePackListeners implements Listener {
         ));
       }
 
+      if (Main.getInstance().getCustomConfig().getBoolean("dyed-torches")) {
+        packs.add(createPack(
+          "https://download.mc-packs.net/pack/52bb3578b13879a17b3f13ee06333197d2d231a2.zip",
+          "52bb3578b13879a17b3f13ee06333197d2d231a2"
+        ));
+      }
+
       if (!packs.isEmpty()) {
         ResourcePackRequest request = ResourcePackRequest.resourcePackRequest()
           .packs(packs)
