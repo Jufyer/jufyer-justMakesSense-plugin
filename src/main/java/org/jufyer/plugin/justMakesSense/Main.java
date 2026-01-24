@@ -56,13 +56,12 @@ public final class Main extends JavaPlugin implements Listener {
   public void onEnable() {
     instance = this;
     saveDefaultConfig();
-    //createCustomConfig();
 
     Bukkit.getPluginManager().registerEvents(new ResourcePackListeners(), this);
     getLogger().info("The following features are enabled: ");
 
     // Cauldron Rework
-
+    // Ice Cauldrons
     if (getCustomConfig().getBoolean("enable-ice")){
       getLogger().info("Ice cauldrons enabled");
       Bukkit.getPluginManager().registerEvents(new CauldronIceListeners(), this);
@@ -73,6 +72,7 @@ public final class Main extends JavaPlugin implements Listener {
       }, 1L);
     }
 
+    // Honey Cauldrons
     if (getCustomConfig().getBoolean("enable-honey")) {
       getLogger().info("Honey cauldrons enabled");
       Bukkit.getPluginManager().registerEvents(new CauldronHoneyListeners(), this);
@@ -83,6 +83,7 @@ public final class Main extends JavaPlugin implements Listener {
       }, 1L);
     }
 
+    // Remove dye with cauldron
     if (getCustomConfig().getBoolean("enable-remove-dye")) {
       Bukkit.getPluginManager().registerEvents(new CauldronRemoveDyeListeners(), this);
       getLogger().info("Remove-Dye cauldrons enabled");
@@ -150,10 +151,6 @@ public final class Main extends JavaPlugin implements Listener {
 
   @Override
   public void onDisable() {
-    if (getCustomConfig() == null) {
-      return;
-    }
-
     if (getCustomConfig().getBoolean("enable-ice")) {
       CauldronIceListeners.saveFilledIceCauldrons();
     }
