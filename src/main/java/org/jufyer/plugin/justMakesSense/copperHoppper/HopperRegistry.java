@@ -250,7 +250,7 @@ public class HopperRegistry {
 
 
   public static void addCopperHopperRecipes() {
-    RecipesAPI recipesAPI = new RecipesAPI(Main.getInstance(), true);
+    RecipesAPI recipesAPI = new RecipesAPI(Main.getInstance(), false);
 
     for (CopperVariant variant : CopperVariant.values()) {
       if (variant.equals(CopperVariant.WAXED)) continue;

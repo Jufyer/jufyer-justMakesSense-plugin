@@ -160,7 +160,7 @@ public class DyedTorchesRegistry {
   }
 
   public static void addDyedTorchRecipes() {
-    RecipesAPI recipesAPI = new RecipesAPI(Main.getInstance(), true);
+    RecipesAPI recipesAPI = new RecipesAPI(Main.getInstance(), false);
 
     for (DyedTorchesVariant variant : DyedTorchesVariant.values()) {
 

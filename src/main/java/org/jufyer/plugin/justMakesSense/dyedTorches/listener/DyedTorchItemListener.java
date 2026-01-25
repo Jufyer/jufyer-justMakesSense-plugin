@@ -14,9 +14,7 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDropItemEvent;
-import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -26,10 +24,7 @@ import org.jufyer.plugin.justMakesSense.copperHoppper.HopperRegistry;
 import org.jufyer.plugin.justMakesSense.dyedTorches.DyedTorchesRegistry;
 import org.jufyer.plugin.justMakesSense.dyedTorches.DyedTorchesVariant;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DyedTorchItemListener implements Listener {
   private final Map<Player, Long> lastPlacedBlockTimes = new HashMap<>();
@@ -98,23 +93,23 @@ public class DyedTorchItemListener implements Listener {
     }
   }
 
-  @EventHandler
-  public void onBlockBreak(BlockBreakEvent event) {
-    if (event.getBlock().getType().equals(Material.TORCH) || event.getBlock().getType().equals(Material.WALL_TORCH)) {
-      Location blockLoc = event.getBlock().getLocation();
-      if (Main.dyedTorches.containsKey(blockLoc)) {
-        ItemDisplay display = Main.dyedTorches.get(blockLoc);
-        for (DyedTorchesVariant variant : DyedTorchesVariant.values()) {
-          if (display.getPersistentDataContainer().has(variant.getBlockKey()) || display.getPersistentDataContainer().has(variant.getWallBlockKey())) {
-            Main.dyedTorches.get(blockLoc).remove();
-            Main.dyedTorches.remove(blockLoc);
-
-            blockLoc.getWorld().dropItemNaturally(blockLoc.add(0,0.3,0), DyedTorchesRegistry.DyedTorchItem1to1(variant));
-          }
-        }
-      }
-    }
-  }
+//  @EventHandler
+//  public void onBlockBreak(BlockBreakEvent event) {
+//    if (event.getBlock().getType().equals(Material.TORCH) || event.getBlock().getType().equals(Material.WALL_TORCH)) {
+//      Location blockLoc = event.getBlock().getLocation();
+//      if (Main.dyedTorches.containsKey(blockLoc)) {
+//        ItemDisplay display = Main.dyedTorches.get(blockLoc);
+//        for (DyedTorchesVariant variant : DyedTorchesVariant.values()) {
+//          if (display.getPersistentDataContainer().has(variant.getBlockKey()) || display.getPersistentDataContainer().has(variant.getWallBlockKey())) {
+//            Main.dyedTorches.get(blockLoc).remove();
+//            Main.dyedTorches.remove(blockLoc);
+//
+//            blockLoc.getWorld().dropItemNaturally(blockLoc.add(0,0.3,0), DyedTorchesRegistry.DyedTorchItem1to1(variant));
+//          }
+//        }
+//      }
+//    }
+//  }
 //
 //  @EventHandler
 //  public void onBlockDropItem(BlockDropItemEvent event) {
@@ -147,30 +142,126 @@ public class DyedTorchItemListener implements Listener {
 //    }
 //  }
 
-  @EventHandler
-  public void onBlockPhysics(BlockPhysicsEvent event) {
-    Block block = event.getBlock();
-    if (block.getType() != Material.TORCH && block.getType() != Material.WALL_TORCH) {
-      return;
-    }
+//  @EventHandler
+//  public void onBlockPhysics(BlockPhysicsEvent event) {
+//    if (event.getSourceBlock().getType().equals(Material.TORCH)) return;
+//    Block block = event.getBlock();
+//    if (block.getType() != Material.TORCH && block.getType() != Material.WALL_TORCH) {
+//      return;
+//    }
+//
+//    Location loc = block.getLocation().toBlockLocation();
+//
+//    if (!Main.dyedTorches.containsKey(loc)) return;
+//
+//    ItemDisplay display = Main.dyedTorches.get(loc);
+//    for (DyedTorchesVariant variant : DyedTorchesVariant.values()) {
+//      if (display.getPersistentDataContainer().has(variant.getBlockKey()) || display.getPersistentDataContainer().has(variant.getWallBlockKey())) {
+//
+//        block.setType(Material.AIR, false);
+//        display.remove();
+//        Main.dyedTorches.remove(loc);
+//
+//        block.getWorld().dropItemNaturally(loc.clone().add(0, 0.3, 0), DyedTorchesRegistry.DyedTorchItem1to1(variant));
+//        break;
+//      }
+//    }
+//  }
 
-    Location loc = block.getLocation().toBlockLocation();
-
+  private void destroyDyedTorch(Location loc) {
     if (!Main.dyedTorches.containsKey(loc)) return;
 
     ItemDisplay display = Main.dyedTorches.get(loc);
+    Block block = loc.getBlock();
+
     for (DyedTorchesVariant variant : DyedTorchesVariant.values()) {
       if (display.getPersistentDataContainer().has(variant.getBlockKey()) || display.getPersistentDataContainer().has(variant.getWallBlockKey())) {
-
         block.setType(Material.AIR, false);
         display.remove();
         Main.dyedTorches.remove(loc);
 
         block.getWorld().dropItemNaturally(loc.clone().add(0, 0.3, 0), DyedTorchesRegistry.DyedTorchItem1to1(variant));
-        break;
+        return;
       }
     }
   }
+
+  @EventHandler
+  public void onBlockFromTo(BlockFromToEvent e) {
+    if (e.getToBlock().getType() == Material.TORCH || e.getToBlock().getType() == Material.WALL_TORCH) {
+      destroyDyedTorch(e.getToBlock().getLocation());
+      e.setCancelled(true);
+    }
+  }
+
+  @EventHandler
+  public void onBlockBreak(BlockBreakEvent e) {
+    Block block = e.getBlock();
+
+    if (block.getType() == Material.TORCH || block.getType() == Material.WALL_TORCH) {
+      destroyDyedTorch(block.getLocation());
+      return;
+    }
+
+    List<Location> torches = getTorchLocations(block);
+    if (!torches.isEmpty()) {
+      e.setCancelled(true);
+      torches.forEach(this::destroyDyedTorch);
+    }
+  }
+
+
+  @EventHandler
+  public void onBlockPistonExtend(BlockPistonExtendEvent e) {
+    List<Location> torches = new ArrayList<>();
+
+    for (Block b : e.getBlocks()) {
+      torches.addAll(getTorchLocations(b));
+    }
+
+    if (!torches.isEmpty()) {
+      e.setCancelled(true);
+      torches.forEach(this::destroyDyedTorch);
+    }
+  }
+
+  @EventHandler
+  public void onBlockPistonRetract(BlockPistonRetractEvent e) {
+    List<Location> torches = new ArrayList<>();
+
+    for (Block b : e.getBlocks()) {
+      torches.addAll(getTorchLocations(b));
+    }
+
+    if (!torches.isEmpty()) {
+      e.setCancelled(true);
+      torches.forEach(this::destroyDyedTorch);
+    }
+  }
+
+  private List<Location> getTorchLocations(Block b) {
+    List<Location> locations = new ArrayList<>();
+
+    // Torch oben
+    if (b.getRelative(BlockFace.UP).getType() == Material.TORCH) {
+      locations.add(b.getRelative(BlockFace.UP).getLocation());
+    }
+
+    // Wall torches
+    BlockFace[] faces = {
+      BlockFace.WEST, BlockFace.EAST,
+      BlockFace.SOUTH, BlockFace.NORTH
+    };
+
+    for (BlockFace face : faces) {
+      if (b.getRelative(face).getType() == Material.WALL_TORCH) {
+        locations.add(b.getRelative(face).getLocation());
+      }
+    }
+
+    return locations;
+  }
+
 
   private void createBlock(DyedTorchesVariant variant, Location loc, BlockFace blockFace) {
     if (blockFace == BlockFace.NORTH){

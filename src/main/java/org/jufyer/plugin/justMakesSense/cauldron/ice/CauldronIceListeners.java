@@ -74,7 +74,7 @@ public class CauldronIceListeners implements Listener {
     for (int x = 0; x < 16; x++) {
       for (int z = 0; z < 16; z++) {
         for (int y = minHeight; y < maxHeight; y++) {
-          Block block = chunk.getBlock(x, y, z);
+          Block block = event.getFrom().add(x, y, z).getBlock();
           if (block.getType() == Material.WATER_CAULDRON) {
             Block cauldron = block;
             if (isFreezingPossible(block.getBiome(), block.getLocation().getZ())) {
@@ -180,6 +180,7 @@ public class CauldronIceListeners implements Listener {
   }
 
   private void createRunner(Block cauldron) {
+    Main.getInstance().getLogger().info("Created Ice cauldron runner");
     new org.bukkit.scheduler.BukkitRunnable() {
       @Override
       public void run() {

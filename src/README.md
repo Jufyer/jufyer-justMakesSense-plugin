@@ -41,8 +41,6 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 * The dye is removed from the item
 * The cauldron water level decreases by one
 
-[IMAGE: cauldron_dye]
-
 ---
 
 ### Dispenser Interaction
@@ -134,10 +132,8 @@ H = Honeycomb
 ## Edible Glistering Melon
 
 * Glistering Melons are now edible
-* Grants Regeneration I for 4 seconds
+* Grants Regeneration II for 4 seconds
 * Restores food level and saturation (up to vanilla limits)
-
-[IMAGE: glistering_melon]
 
 ---
 
