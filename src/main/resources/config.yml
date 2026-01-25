@@ -44,7 +44,7 @@ copper-hopper: true
 
 # Number of items ejected before the hopper loses its wax layer
 # (0 = never loses wax, 1000 = vanilla-like default)
-copper-hopper-item-count: 10
+copper-hopper-item-count: 1000
 
 
 # --------------------------------------------------
