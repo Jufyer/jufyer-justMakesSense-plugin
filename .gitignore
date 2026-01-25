@@ -33,3 +33,4 @@ bin/
 /Testing/
 /run/
 /build/
+/.gradle/
