@@ -73,14 +73,14 @@ Copper Hoppers are upgraded hoppers with different transfer speeds depending on 
 ### Variants and Speeds
 
 | Variant         | Ticks per Item | Notes               |
-| --------------- |----------------| ------------------- |
+| --------------- |----------------|---------------------|
 | NORMAL          | 4              | Faster than vanilla |
 | EXPOSED         | 6              |                     |
-| WEATHERED       | 8              |                     |
+| WEATHERED       | 8              | Vanilla speed       |
 | OXIDIZED        | 12             |                     |
-| WAXED           | 4              |                     |
+| WAXED           | 4              | Faster than vanilla |
 | WAXED_EXPOSED   | 6              |                     |
-| WAXED_WEATHERED | 8              |                     |
+| WAXED_WEATHERED | 8              | Vanilla speed       |
 | WAXED_OXIDIZED  | 12             |                     |
 
 Vanilla hopper speed: 8 ticks per item
