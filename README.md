@@ -20,7 +20,7 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 * After 1–5 minutes, a Honey Block appears inside the cauldron
 * Honey can be removed manually or extracted using hoppers
 
-[IMAGE: cauldron_honey]
+<p align="center"><img src="https://imgur.com/GBZps4f.png"></p>
 
 ---
 
@@ -31,7 +31,7 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
   * After 1–5 minutes, the water turns into an Ice Block
 * Ice can be collected manually or via hoppers
 
-[IMAGE: cauldron_ice]
+<p align="center"><img src="https://imgur.com/yyjTMLp.png"></p>
 
 ---
 
@@ -49,7 +49,7 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 * Supports water, lava, and powder snow
 * Optional interaction from below
 
-[IMAGE: cauldron_dispenser]
+<p align="center"><img src="https://imgur.com/tGTZzQS.png"></p>
 
 ---
 
@@ -60,7 +60,7 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 * Only one player can ride the boat while a banner is present
 * Shift-right-click again to remove the banner
 
-[IMAGE: banner_boat]
+<p align="center"><img src="https://imgur.com/StpnqOT.png"></p>
 
 ---
 
@@ -68,7 +68,7 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 
 Copper Hoppers are upgraded hoppers with different transfer speeds depending on their oxidation state.
 
-[IMAGE: copper_hopper_variants]
+<p align="center"><img src="https://imgur.com/peLIGKg.png"></p>
 
 ### Variants and Speeds
 
@@ -125,7 +125,7 @@ H = Honeycomb
 * Produces a dyed torch variant
 * Decorative feature only
 
-[IMAGE: dyed_torches]
+<p align="center"><img src="https://imgur.com/Z4rKP0B.png"></p>
 
 ---
 
@@ -142,7 +142,7 @@ H = Honeycomb
 * Goats drop mutton
 * Husks have a chance to drop sand
 
-[IMAGE: mob_drops]
+<p align="center"><img src="https://imgur.com/E35zJqO.png"></p>
 
 ---
 
