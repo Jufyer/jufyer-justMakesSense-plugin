@@ -20,7 +20,7 @@ public class JungleZombie implements Listener {
     NPCRegistry registry = CitizensAPI.getNPCRegistry();
 
     NPC npc = registry.createNPC(EntityType.PLAYER, "Jungle Zombie");
-    npc.addTrait(ZombieAITrait.class);
+    npc.addTrait(JungleZombieAITrait.class);
     npc.setProtected(false);
 
     setSkin(npc);

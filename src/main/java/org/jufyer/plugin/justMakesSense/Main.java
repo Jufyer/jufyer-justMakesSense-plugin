@@ -5,7 +5,6 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ItemDisplay;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jufyer.plugin.justMakesSense.banner.bannerOnBoats.BannerOnBoatsListeners;
@@ -24,7 +23,7 @@ import org.jufyer.plugin.justMakesSense.glisteringMelon.GlisteringMelonEatListen
 import org.jufyer.plugin.justMakesSense.goat.GoatDropMuttonListener;
 import org.jufyer.plugin.justMakesSense.husk.HuskDropSandListener;
 import org.jufyer.plugin.justMakesSense.zombie.JungleZombie;
-import org.jufyer.plugin.justMakesSense.zombie.ZombieAITrait;
+import org.jufyer.plugin.justMakesSense.zombie.JungleZombieAITrait;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -163,7 +162,7 @@ public final class Main extends JavaPlugin implements Listener {
         }
 
         net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(
-          net.citizensnpcs.api.trait.TraitInfo.create(ZombieAITrait.class)
+          net.citizensnpcs.api.trait.TraitInfo.create(JungleZombieAITrait.class)
             .withName("ZombieAI")
         );
 
@@ -187,7 +186,7 @@ public final class Main extends JavaPlugin implements Listener {
       DyedTorchesRegistry.saveDyedTorchWithItemDisplay();
     }
     if (getCustomConfig().getBoolean("jungle-zombie")) {
-      ZombieAITrait.removeAllPoisonClouds();
+      JungleZombieAITrait.removeAllPoisonClouds();
     }
   }
 

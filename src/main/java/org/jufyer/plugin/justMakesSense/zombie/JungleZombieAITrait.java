@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ZombieAITrait extends Trait {
+public class JungleZombieAITrait extends Trait {
   private static final NamespacedKey poisonCloudKey = new NamespacedKey(Main.getInstance(), "POISON_CLOUD");
   private static final List<AreaEffectCloud> poisonClouds = new ArrayList<>();
 
@@ -34,7 +34,7 @@ public class ZombieAITrait extends Trait {
   private int idleTicks = 0;
   private Location lastTargetLoc;
 
-  public ZombieAITrait() {
+  public JungleZombieAITrait() {
     super("ZombieAI");
   }
 
