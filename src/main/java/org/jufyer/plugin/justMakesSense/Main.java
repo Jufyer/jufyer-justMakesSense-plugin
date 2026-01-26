@@ -22,8 +22,7 @@ import org.jufyer.plugin.justMakesSense.dyedTorches.listener.DyedTorchItemListen
 import org.jufyer.plugin.justMakesSense.glisteringMelon.GlisteringMelonEatListeners;
 import org.jufyer.plugin.justMakesSense.goat.GoatDropMuttonListener;
 import org.jufyer.plugin.justMakesSense.husk.HuskDropSandListener;
-import org.jufyer.plugin.justMakesSense.zombie.JungleZombie;
-import org.jufyer.plugin.justMakesSense.zombie.JungleZombieAITrait;
+import org.jufyer.plugin.justMakesSense.zombie.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -163,10 +162,30 @@ public final class Main extends JavaPlugin implements Listener {
 
         net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(
           net.citizensnpcs.api.trait.TraitInfo.create(JungleZombieAITrait.class)
-            .withName("ZombieAI")
+            .withName("JungleZombieAI")
         );
 
-        Bukkit.getPluginManager().registerEvents(new JungleZombie(), this);
+        Bukkit.getPluginManager().registerEvents(new CustomZombieDeathListener(), this);
+      }, 1L);
+    }
+
+    // Snow Zombie
+    if (getCustomConfig().getBoolean("snow-zombie")) {
+      Bukkit.getScheduler().runTaskLater(this, () -> {
+        if (!Bukkit.getPluginManager().isPluginEnabled("Citizens")) {
+          getLogger().severe("Citizens not found! Plugin disabled.");
+          getServer().getPluginManager().disablePlugin(this);
+          return;
+        }else {
+          getLogger().info("Successfully loaded Citizens.");
+        }
+
+        net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(
+          net.citizensnpcs.api.trait.TraitInfo.create(SnowZombieAITrait.class)
+            .withName("SnowZombieAI")
+        );
+
+        Bukkit.getPluginManager().registerEvents(new CustomZombieDeathListener(), this);
       }, 1L);
     }
   }
@@ -187,6 +206,9 @@ public final class Main extends JavaPlugin implements Listener {
     }
     if (getCustomConfig().getBoolean("jungle-zombie")) {
       JungleZombieAITrait.removeAllPoisonClouds();
+    }
+    if (getCustomConfig().getBoolean("snow-zombie")) {
+      SnowZombieAITrait.removeAllSlownessClouds();
     }
   }
 

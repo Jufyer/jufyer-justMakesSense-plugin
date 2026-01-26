@@ -53,6 +53,6 @@ bukkitPluginYaml {
   apiVersion = "1.21"
   depend.add("Citizens")
   commands {
-    register("spawnZombie")
+    register("spawnSnowZombie")
   }
 }

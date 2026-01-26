@@ -45,22 +45,6 @@ public class JungleZombie implements Listener {
   }
 
   @EventHandler
-  public void onPlayerDeath(PlayerDeathEvent event) {
-    if (CitizensAPI.getNPCRegistry().isNPC(event.getEntity())) {
-      event.deathMessage(null);
-      NPC npc = CitizensAPI.getNPCRegistry().getNPC(event.getEntity());
-
-      event.getDrops().add(new ItemStack(Material.ROTTEN_FLESH));
-      for (ItemStack item : event.getEntity().getInventory().getContents()) {
-        if (item == null) continue;
-        event.getDrops().add(item);
-      }
-
-      CitizensAPI.getNPCRegistry().deregister(npc);
-    }
-  }
-
-  @EventHandler
   public void onEntitySpawn(EntitySpawnEvent event) {
     if (event.getEntity().getType().equals(EntityType.ZOMBIE)) {
       if (event.getLocation().getBlock().getBiome().equals(Biome.JUNGLE)

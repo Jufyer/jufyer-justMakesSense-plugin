@@ -65,3 +65,6 @@ goat-drop-mutton: true
 
 # Enable dyed torch variants
 dyed-torches: true
+
+snow-zombie: true
+jungle-zombie: true

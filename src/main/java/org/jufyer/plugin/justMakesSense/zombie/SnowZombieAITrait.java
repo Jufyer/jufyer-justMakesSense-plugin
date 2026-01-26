@@ -15,27 +15,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class JungleZombieAITrait extends Trait {
-  private static final NamespacedKey poisonCloudKey = new NamespacedKey(Main.getInstance(), "POISON_CLOUD");
-  private static final List<AreaEffectCloud> poisonClouds = new ArrayList<>();
+public class SnowZombieAITrait extends Trait {
+  private static final NamespacedKey slownessCloudKey = new NamespacedKey(Main.getInstance(), "SLOWNESS_CLOUD");
+  private static final List<AreaEffectCloud> slownessClouds = new ArrayList<>();
 
   private static final double DETECTION_RANGE = 40.0;
   private static final double FOLLOW_RANGE = 16.0;
   private static final double ATTACK_RANGE = 2.0;
   private static final double MOVEMENT_SPEED = 0.7;
   private static final int ATTACK_COOLDOWN = 20;
-  private static final int SPAWN_POISON_COOLDOWN = 40;
+  private static final int SPAWN_SLOWNESS_COOLDOWN = 40;
   private static final float ATTACK_DAMAGE = 3.0f;
-  private static final int POISON_LIFETIME = 200;
+  private static final int SLOWNESS_LIFETIME = 200;
 
   private Player target;
   private int attackCooldown = 0;
-  private int poisonSpawnCooldown = 0;
+  private int slownessSpawnCooldown = 0;
   private int idleTicks = 0;
   private Location lastTargetLoc;
 
-  public JungleZombieAITrait() {
-    super("JungleZombieAI");
+  public SnowZombieAITrait() {
+    super("SnowZombieAI");
   }
 
   @Override
@@ -160,23 +160,23 @@ public class JungleZombieAITrait extends Trait {
 
     player.setVelocity(player.getVelocity().add(direction));
 
-    if (poisonSpawnCooldown == 0) {
-      player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 60, 1));
+    if (slownessSpawnCooldown == 0) {
+      player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 60, 1));
       spawnCloud(entity.getLocation());
-      poisonSpawnCooldown = SPAWN_POISON_COOLDOWN;
+      slownessSpawnCooldown = SPAWN_SLOWNESS_COOLDOWN;
     }
   }
 
   private void spawnCloud(Location location) {
     AreaEffectCloud cloud = (AreaEffectCloud) location.getWorld().spawnEntity(location, EntityType.AREA_EFFECT_CLOUD);
-    cloud.addCustomEffect(new PotionEffect(PotionEffectType.POISON, 20,1), true);
+    cloud.addCustomEffect(new PotionEffect(PotionEffectType.SLOWNESS , 20,1), true);
 
-    cloud.getPersistentDataContainer().set(poisonCloudKey, PersistentDataType.BOOLEAN, true);
-    poisonClouds.add(cloud);
+    cloud.getPersistentDataContainer().set(slownessCloudKey, PersistentDataType.BOOLEAN, true);
+    slownessClouds.add(cloud);
 
     Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
       cloud.remove();
-    }, POISON_LIFETIME);
+    }, SLOWNESS_LIFETIME);
   }
 
   private void lineOfSightCheck(Navigator nav) {
@@ -205,8 +205,8 @@ public class JungleZombieAITrait extends Trait {
     if (attackCooldown > 0) {
       attackCooldown--;
     }
-    if (poisonSpawnCooldown > 0) {
-      poisonSpawnCooldown--;
+    if (slownessSpawnCooldown > 0) {
+      slownessSpawnCooldown--;
     }
   }
 
@@ -318,10 +318,10 @@ public class JungleZombieAITrait extends Trait {
     zombie.teleport(lookAt);
   }
 
-  public static void removeAllPoisonClouds() {
-    for (AreaEffectCloud cloud : poisonClouds) {
+  public static void removeAllSlownessClouds() {
+    for (AreaEffectCloud cloud : slownessClouds) {
       cloud.remove();
     }
-    poisonClouds.clear();
+    slownessClouds.clear();
   }
 }
