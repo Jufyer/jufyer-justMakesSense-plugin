@@ -5,6 +5,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ItemDisplay;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jufyer.plugin.justMakesSense.banner.bannerOnBoats.BannerOnBoatsListeners;
@@ -22,6 +23,8 @@ import org.jufyer.plugin.justMakesSense.dyedTorches.listener.DyedTorchItemListen
 import org.jufyer.plugin.justMakesSense.glisteringMelon.GlisteringMelonEatListeners;
 import org.jufyer.plugin.justMakesSense.goat.GoatDropMuttonListener;
 import org.jufyer.plugin.justMakesSense.husk.HuskDropSandListener;
+import org.jufyer.plugin.justMakesSense.zombie.JungleZombie;
+import org.jufyer.plugin.justMakesSense.zombie.ZombieAITrait;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -147,6 +150,26 @@ public final class Main extends JavaPlugin implements Listener {
         getLogger().info("Successfully loaded dyed torches after world initialization.");
       }, 1L);
     }
+
+    // Jungle Zombie
+    if (getCustomConfig().getBoolean("jungle-zombie")) {
+      Bukkit.getScheduler().runTaskLater(this, () -> {
+        if (!Bukkit.getPluginManager().isPluginEnabled("Citizens")) {
+          getLogger().severe("Citizens not found! Plugin disabled.");
+          getServer().getPluginManager().disablePlugin(this);
+          return;
+        }else {
+          getLogger().info("Successfully loaded Citizens.");
+        }
+
+        net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(
+          net.citizensnpcs.api.trait.TraitInfo.create(ZombieAITrait.class)
+            .withName("ZombieAI")
+        );
+
+        Bukkit.getPluginManager().registerEvents(new JungleZombie(), this);
+      }, 1L);
+    }
   }
 
   @Override
@@ -162,6 +185,9 @@ public final class Main extends JavaPlugin implements Listener {
     }
     if (getCustomConfig().getBoolean("dyed-torches")) {
       DyedTorchesRegistry.saveDyedTorchWithItemDisplay();
+    }
+    if (getCustomConfig().getBoolean("jungle-zombie")) {
+      ZombieAITrait.removeAllPoisonClouds();
     }
   }
 

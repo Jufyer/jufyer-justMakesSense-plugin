@@ -1,31 +1,75 @@
 package org.jufyer.plugin.justMakesSense.zombie;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.monster.zombie.Zombie;
-import net.minecraft.world.level.Level;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.npc.NPCRegistry;
+import net.citizensnpcs.trait.SkinTrait;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.persistence.PersistentDataType;
-import org.jufyer.plugin.justMakesSense.Main;
+import org.bukkit.Material;
+import org.bukkit.block.Biome;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
 
-public class JungleZombie extends Zombie {
-  public static NamespacedKey JungleZombieKey = new NamespacedKey(Main.getInstance(), "JUNGLE_ZOMBIE");
-  //public static NamespacedKey JungleZombieArmorstandKey = new NamespacedKey(Main.getInstance(), "JUNGLE_ZOMBIE_ARMORSTAND");
+public class JungleZombie implements Listener {
+  public static void spawn(Location loc) {
+    NPCRegistry registry = CitizensAPI.getNPCRegistry();
 
-  public JungleZombie(Location loc) {
-    super(EntityType.ZOMBIE, ((CraftWorld) loc.getWorld()).getHandle());
+    NPC npc = registry.createNPC(EntityType.PLAYER, "Jungle Zombie");
+    npc.addTrait(ZombieAITrait.class);
+    npc.setProtected(false);
 
-    this.setPosRaw(loc.getX(), loc.getY(), loc.getZ());
-    this.getBukkitEntity().getPersistentDataContainer().set(JungleZombieKey, PersistentDataType.BOOLEAN, true);
-    this.setInvulnerable(false);
-    this.setCustomNameVisible(false);
+    setSkin(npc);
+    npc.spawn(loc);
+    npc.data().set(NPC.Metadata.NAMEPLATE_VISIBLE, false);
 
-    this.persist = true;
+    Player zombiePlayer = (Player) npc.getEntity();
+    zombiePlayer.setHealth(10);
+  }
 
-    ((CraftWorld) loc.getWorld()).getHandle().addFreshEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM);
+  private static void setSkin(NPC npc) {
+    SkinTrait skin = npc.getOrAddTrait(SkinTrait.class);
 
+    skin.setSkinPersistent(
+      "jungle_zombie",
+      SkinData.JUNGLE_ZOMBIE_SIGNATURE,
+      SkinData.JUNGLE_ZOMBIE_VALUE
+    );
+
+    npc.data().setPersistent(NPC.Metadata.REMOVE_FROM_TABLIST, true);
+    npc.data().setPersistent(NPC.Metadata.REMOVE_FROM_PLAYERLIST, true);
+  }
+
+  @EventHandler
+  public void onPlayerDeath(PlayerDeathEvent event) {
+    if (CitizensAPI.getNPCRegistry().isNPC(event.getEntity())) {
+      event.deathMessage(null);
+      NPC npc = CitizensAPI.getNPCRegistry().getNPC(event.getEntity());
+
+      event.getDrops().add(new ItemStack(Material.ROTTEN_FLESH));
+      for (ItemStack item : event.getEntity().getInventory().getContents()) {
+        if (item == null) continue;
+        event.getDrops().add(item);
+      }
+
+      CitizensAPI.getNPCRegistry().deregister(npc);
+    }
+  }
+
+  @EventHandler
+  public void onEntitySpawn(EntitySpawnEvent event) {
+    if (event.getEntity().getType().equals(EntityType.ZOMBIE)) {
+      if (event.getLocation().getBlock().getBiome().equals(Biome.JUNGLE)
+        || event.getLocation().getBlock().getBiome().equals(Biome.BAMBOO_JUNGLE)
+        || event.getLocation().getBlock().getBiome().equals(Biome.SPARSE_JUNGLE)) {
+
+        spawn(event.getLocation());
+        event.setCancelled(true);
+      }
+    }
   }
 }

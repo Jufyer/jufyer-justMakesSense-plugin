@@ -23,6 +23,7 @@ repositories {
   maven("https://oss.sonatype.org/content/groups/public/")
   maven("https://maven.devs.beer/")
   maven("https://repo.oraxen.com/releases")
+  maven("https://repo.citizensnpcs.co/")
 
 }
 
@@ -31,6 +32,9 @@ dependencies {
 
   compileOnly("io.th0rgal:oraxen:1.181.0")
   compileOnly("dev.lone:api-itemsadder:4.0.10")
+
+  compileOnly(files("libs/citizens-api-2.0.33.jar"))
+  compileOnly(files("libs/citizens-main-2.0.33.jar"))
 }
 
 tasks {
@@ -47,7 +51,8 @@ bukkitPluginYaml {
   load = BukkitPluginYaml.PluginLoadOrder.STARTUP
   authors.add("Jufyer")
   apiVersion = "1.21"
+  depend.add("Citizens")
   commands {
-    register("test")
+    register("spawnZombie")
   }
 }
