@@ -53,6 +53,16 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 
 ---
 
+### Zombie Variants
+
+* Two new Zombie variants: Jungle and Snow
+* The Jungle Zombie will summon poisonous Area Effect Clouds 
+* The Snow Zombie will summon slowness Area Effect Clouds
+
+<p align="center"><img src="https://imgur.com/TEob75u.png"></p>
+
+---
+
 ## Banners on Boats
 
 * Shift-right-click a boat with a banner to place the banner inside the boat
