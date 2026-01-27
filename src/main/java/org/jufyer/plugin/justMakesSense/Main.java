@@ -166,6 +166,7 @@ public final class Main extends JavaPlugin implements Listener {
         );
 
         Bukkit.getPluginManager().registerEvents(new CustomZombieDeathListener(), this);
+        Bukkit.getPluginManager().registerEvents(new JungleZombie(), this);
       }, 1L);
     }
 
@@ -186,6 +187,7 @@ public final class Main extends JavaPlugin implements Listener {
         );
 
         Bukkit.getPluginManager().registerEvents(new CustomZombieDeathListener(), this);
+        Bukkit.getPluginManager().registerEvents(new SnowZombie(), this);
       }, 1L);
     }
   }

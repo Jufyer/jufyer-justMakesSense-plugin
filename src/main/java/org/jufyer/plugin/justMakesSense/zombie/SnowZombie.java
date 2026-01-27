@@ -19,6 +19,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SnowZombie implements Listener {
   public static void spawn(Location loc) {
     NPCRegistry registry = CitizensAPI.getNPCRegistry();
@@ -50,9 +53,40 @@ public class SnowZombie implements Listener {
 
   @EventHandler
   public void onEntitySpawn(EntitySpawnEvent event) {
-    if (event.getEntity().getType().equals(EntityType.ZOMBIE)) {
-      if (isFreezingPossible(event.getLocation().getBlock().getBiome(), event.getLocation().getZ())) {
+    Biome[] biomesWherePossible = {
+      Biome.FROZEN_PEAKS,
+      Biome.JAGGED_PEAKS,
+      Biome.SNOWY_TAIGA,
+      Biome.SNOWY_SLOPES,
+      Biome.GROVE,
+      Biome.FROZEN_RIVER,
+      Biome.FROZEN_OCEAN,
+      Biome.SNOWY_PLAINS,
+      Biome.ICE_SPIKES,
+      Biome.SNOWY_BEACH,
+      Biome.WINDSWEPT_GRAVELLY_HILLS,
+      Biome.WINDSWEPT_FOREST,
+      Biome.WINDSWEPT_HILLS,
+      Biome.STONY_SHORE,
+      Biome.OLD_GROWTH_SPRUCE_TAIGA,
+      Biome.TAIGA,
+      Biome.OLD_GROWTH_PINE_TAIGA,
+      Biome.LUSH_CAVES,
+      Biome.THE_VOID,
+      Biome.RIVER,
+      Biome.WARM_OCEAN,
+      Biome.LUKEWARM_OCEAN,
+      Biome.DEEP_LUKEWARM_OCEAN,
+      Biome.OCEAN,
+      Biome.DEEP_OCEAN,
+      Biome.CHERRY_GROVE,
+      Biome.MEADOW
+    };
+    List<Biome> biomesWhereSnowZombieSpawningIsPossible = new ArrayList<>(List.of(biomesWherePossible));
 
+
+    if (event.getEntity().getType().equals(EntityType.ZOMBIE)) {
+      if (biomesWhereSnowZombieSpawningIsPossible.contains(event.getLocation().getBlock().getBiome())) {
         spawn(event.getLocation());
         event.setCancelled(true);
       }

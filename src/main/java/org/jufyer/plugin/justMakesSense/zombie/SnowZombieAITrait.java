@@ -217,6 +217,7 @@ public class SnowZombieAITrait extends Trait {
     LivingEntity zombie = (LivingEntity) entity;
 
     Location targetLoc = target.getLocation();
+    if (target == null) return;
     Location zombieLoc = zombie.getLocation();
     double distance = zombieLoc.distance(targetLoc);
 
