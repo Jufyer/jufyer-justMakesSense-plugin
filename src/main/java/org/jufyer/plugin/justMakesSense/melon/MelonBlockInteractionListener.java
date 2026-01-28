@@ -8,6 +8,8 @@ import org.bukkit.block.data.type.Stairs;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
@@ -26,6 +28,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jufyer.plugin.justMakesSense.Main;
 import org.jufyer.plugin.justMakesSense.copperHoppper.CopperVariant;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class MelonBlockInteractionListener implements Listener {
@@ -251,5 +255,58 @@ public class MelonBlockInteractionListener implements Listener {
         }
       }
     }, 1L, 1L);
+  }
+
+  public static void saveMelonBlockWithItemDisplay() {
+    File file = new File(Main.getInstance().getDataFolder(), "melonBlocks.yml");
+    YamlConfiguration config = new YamlConfiguration();
+
+    int i = 0;
+    for (Map.Entry<Location, ItemDisplay> entry : melonBlocks.entrySet()) {
+      Location hopper = entry.getKey();
+      ItemDisplay display = entry.getValue();
+
+      config.set("melonBlocks." + i + ".location", hopper.getBlock().getLocation().toBlockLocation());
+      config.set("melonBlocks." + i + ".uuid", display.getUniqueId().toString());
+      i++;
+    }
+
+    try {
+      config.save(file);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static void loadMelonBlockWithItemDisplay() {
+    File file = new File(Main.getInstance().getDataFolder(), "melonBlocks.yml");
+    if (!file.exists()) return;
+
+    YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+    if (config.getConfigurationSection("melonBlocks") == null) return;
+
+    for (String key : config.getConfigurationSection("melonBlocks").getKeys(false)) {
+      Location loc = config.getLocation("melonBlocks." + key + ".location");
+      String uuidStr = config.getString("melonBlocks." + key + ".uuid");
+
+      if (loc == null || uuidStr == null) continue;
+
+      if (!loc.isChunkLoaded()) {
+        loc.getChunk().load();
+      }
+
+      UUID uuid = UUID.fromString(uuidStr);
+      Entity entity = Bukkit.getEntity(uuid);
+
+      if (entity instanceof ItemDisplay itemDisplay) {
+        melonBlocks.put(loc.toBlockLocation(), itemDisplay);
+
+        Block block = loc.getBlock();
+        if (block.getBlockData() instanceof Stairs stairs) {
+          Stairs.Shape shape = stairs.getShape();
+          melonBlockStairs.put(loc.toBlockLocation(), shape);
+        }
+      }
+    }
   }
 }

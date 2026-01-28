@@ -186,6 +186,13 @@ public final class Main extends JavaPlugin implements Listener {
     if (getCustomConfig().getBoolean("melon-block-update")) {
       Bukkit.getPluginManager().registerEvents(new MelonBlockInteractionListener(), this);
       MelonBlockInteractionListener.preserveStairShape();
+
+      Bukkit.getScheduler().runTaskLater(this, () -> {
+        MelonBlockInteractionListener.loadMelonBlockWithItemDisplay();
+        getLogger().info("Successfully loaded melon blocks after world initialization.");
+      }, 1L);
+
+      getLogger().info("Melon Block update enabled");
     }
 
   }
@@ -209,6 +216,9 @@ public final class Main extends JavaPlugin implements Listener {
     }
     if (getCustomConfig().getBoolean("snow-zombie")) {
       SnowZombieAITrait.removeAllSlownessClouds();
+    }
+    if (getCustomConfig().getBoolean("melon-block-update")) {
+      MelonBlockInteractionListener.saveMelonBlockWithItemDisplay();
     }
   }
 
