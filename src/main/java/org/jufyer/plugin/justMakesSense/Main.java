@@ -7,23 +7,27 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jufyer.plugin.justMakesSense.banner.bannerOnBoats.BannerOnBoatsListeners;
-import org.jufyer.plugin.justMakesSense.cauldron.dispenser.CauldronDispenserListeners;
-import org.jufyer.plugin.justMakesSense.cauldron.honey.CauldronHoneyListeners;
-import org.jufyer.plugin.justMakesSense.cauldron.ice.CauldronIceListeners;
-import org.jufyer.plugin.justMakesSense.cauldron.removeDye.CauldronRemoveDyeListeners;
-import org.jufyer.plugin.justMakesSense.copperHoppper.HopperBlockEntity;
-import org.jufyer.plugin.justMakesSense.copperHoppper.HopperRegistry;
-import org.jufyer.plugin.justMakesSense.copperHoppper.listener.CopperHopperBlockListener;
-import org.jufyer.plugin.justMakesSense.copperHoppper.listener.CopperHopperItemListener;
-import org.jufyer.plugin.justMakesSense.dyedTorches.DyedTorchesRegistry;
-import org.jufyer.plugin.justMakesSense.dyedTorches.listener.DyedTorchBlockListener;
-import org.jufyer.plugin.justMakesSense.dyedTorches.listener.DyedTorchItemListener;
-import org.jufyer.plugin.justMakesSense.glisteringMelon.GlisteringMelonEatListeners;
-import org.jufyer.plugin.justMakesSense.goat.GoatDropMuttonListener;
-import org.jufyer.plugin.justMakesSense.husk.HuskDropSandListener;
-import org.jufyer.plugin.justMakesSense.melon.MelonBlockInteractionListener;
-import org.jufyer.plugin.justMakesSense.zombie.*;
+import org.jufyer.plugin.justMakesSense.features.banner.BannerBoatListener;
+import org.jufyer.plugin.justMakesSense.features.cauldron.CauldronDispenserListener;
+import org.jufyer.plugin.justMakesSense.features.cauldron.CauldronHoneyListener;
+import org.jufyer.plugin.justMakesSense.features.cauldron.CauldronIceListener;
+import org.jufyer.plugin.justMakesSense.features.cauldron.CauldronDyeListener;
+import org.jufyer.plugin.justMakesSense.features.copperhopper.CopperHopperBlock;
+import org.jufyer.plugin.justMakesSense.features.copperhopper.CopperHopperRegistry;
+import org.jufyer.plugin.justMakesSense.features.copperhopper.listener.CopperHopperBlockListener;
+import org.jufyer.plugin.justMakesSense.features.copperhopper.listener.CopperHopperItemListener;
+import org.jufyer.plugin.justMakesSense.features.dyedtorches.DyedTorchRegistry;
+import org.jufyer.plugin.justMakesSense.features.dyedtorches.listener.DyedTorchBlockListener;
+import org.jufyer.plugin.justMakesSense.features.dyedtorches.listener.DyedTorchItemListener;
+import org.jufyer.plugin.justMakesSense.features.mobs.zombie.jungle.JungleZombie;
+import org.jufyer.plugin.justMakesSense.features.mobs.zombie.jungle.JungleZombieAITrait;
+import org.jufyer.plugin.justMakesSense.features.mobs.zombie.snow.SnowZombie;
+import org.jufyer.plugin.justMakesSense.features.mobs.zombie.snow.SnowZombieAITrait;
+import org.jufyer.plugin.justMakesSense.features.melon.GlisteringMelonEatListener;
+import org.jufyer.plugin.justMakesSense.features.mobs.goat.GoatDropListener;
+import org.jufyer.plugin.justMakesSense.features.mobs.husk.HuskDropListener;
+import org.jufyer.plugin.justMakesSense.features.melon.MelonBlockInteractionListener;
+import org.jufyer.plugin.justMakesSense.features.mobs.zombie.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -57,10 +61,10 @@ public final class Main extends JavaPlugin implements Listener {
     // Ice Cauldrons
     if (getCustomConfig().getBoolean("enable-ice")){
       getLogger().info("Ice cauldrons enabled");
-      Bukkit.getPluginManager().registerEvents(new CauldronIceListeners(), this);
+      Bukkit.getPluginManager().registerEvents(new CauldronIceListener(), this);
 
       Bukkit.getScheduler().runTaskLater(this, () -> {
-        CauldronIceListeners.loadFilledIceCauldrons();
+        CauldronIceListener.loadFilledIceCauldrons();
         getLogger().info("Successfully loaded ice cauldrons after world initialization.");
       }, 1L);
     }
@@ -68,75 +72,75 @@ public final class Main extends JavaPlugin implements Listener {
     // Honey Cauldrons
     if (getCustomConfig().getBoolean("enable-honey")) {
       getLogger().info("Honey cauldrons enabled");
-      Bukkit.getPluginManager().registerEvents(new CauldronHoneyListeners(), this);
+      Bukkit.getPluginManager().registerEvents(new CauldronHoneyListener(), this);
 
       Bukkit.getScheduler().runTaskLater(this, () -> {
-        CauldronHoneyListeners.loadFilledHoneyCauldrons();
+        CauldronHoneyListener.loadFilledHoneyCauldrons();
         getLogger().info("Successfully loaded honey cauldrons after world initialization.");
       }, 1L);
     }
 
     // Remove dye with cauldron
     if (getCustomConfig().getBoolean("enable-remove-dye")) {
-      Bukkit.getPluginManager().registerEvents(new CauldronRemoveDyeListeners(), this);
+      Bukkit.getPluginManager().registerEvents(new CauldronDyeListener(), this);
       getLogger().info("Remove-Dye cauldrons enabled");
     }
 
-    Bukkit.getPluginManager().registerEvents(new CauldronDispenserListeners(), this);
+    Bukkit.getPluginManager().registerEvents(new CauldronDispenserListener(), this);
 
     // Glistering Melon
     if (getCustomConfig().getBoolean("enable-edible-glistering-melon")) {
-      Bukkit.getPluginManager().registerEvents(new GlisteringMelonEatListeners(), this);
+      Bukkit.getPluginManager().registerEvents(new GlisteringMelonEatListener(), this);
       getLogger().info("Edible Glistering Melons enabled");
     }
 
     // Banner
     if (getCustomConfig().getBoolean("banner-on-boats")) {
-      Bukkit.getPluginManager().registerEvents(new BannerOnBoatsListeners(), this);
+      Bukkit.getPluginManager().registerEvents(new BannerBoatListener(), this);
       getLogger().info("Banner on boats enabled");
     }
 
     // Copper Hopper
     if (getCustomConfig().getBoolean("copper-hopper")) {
       Bukkit.getScheduler().runTaskLater(this, () -> {
-        HopperRegistry.loadHopperWithItemDisplay();
+        CopperHopperRegistry.loadHopperWithItemDisplay();
         getLogger().info("Successfully loaded copper hoppers after world initialization.");
       }, 1L);
 
-      HopperRegistry.createCopperHopperItems();
-      HopperRegistry.addCopperHopperRecipes();
+      CopperHopperRegistry.createCopperHopperItems();
+      CopperHopperRegistry.addCopperHopperRecipes();
 
       getServer().getPluginManager().registerEvents(new CopperHopperItemListener(), this);
       getServer().getPluginManager().registerEvents(new CopperHopperBlockListener(), this);
 
-      getServer().getPluginManager().registerEvents(new HopperBlockEntity(), this);
-      HopperBlockEntity.createRunner();
+      getServer().getPluginManager().registerEvents(new CopperHopperBlock(), this);
+      CopperHopperBlock.createRunner();
 
       getLogger().info("Copper hopper enabled");
     }
 
     // Husks Drop Sand
     if (getCustomConfig().getBoolean("husks-drop-sand")) {
-      Bukkit.getPluginManager().registerEvents(new HuskDropSandListener(), this);
+      Bukkit.getPluginManager().registerEvents(new HuskDropListener(), this);
       getLogger().info("Husks drop sand enabled");
     }
 
     // Goat Drop mutton
     if (getCustomConfig().getBoolean("goat-drop-mutton")) {
-      Bukkit.getPluginManager().registerEvents(new GoatDropMuttonListener(), this);
+      Bukkit.getPluginManager().registerEvents(new GoatDropListener(), this);
       getLogger().info("Goat drop mutton enabled");
     }
 
     // Dyed torches
     if (getCustomConfig().getBoolean("dyed-torches")) {
-      DyedTorchesRegistry.createDyedTorchItems();
-      DyedTorchesRegistry.addDyedTorchRecipes();
+      DyedTorchRegistry.createDyedTorchItems();
+      DyedTorchRegistry.addDyedTorchRecipes();
 
       Bukkit.getPluginManager().registerEvents(new DyedTorchBlockListener(), this);
       Bukkit.getPluginManager().registerEvents(new DyedTorchItemListener(), this);
 
       Bukkit.getScheduler().runTaskLater(this, () -> {
-        DyedTorchesRegistry.loadDyedTorchWithItemDisplay();
+        DyedTorchRegistry.loadDyedTorchWithItemDisplay();
         getLogger().info("Successfully loaded dyed torches after world initialization.");
       }, 1L);
     }
@@ -162,7 +166,7 @@ public final class Main extends JavaPlugin implements Listener {
             .withName("JungleZombieAI")
         );
 
-        Bukkit.getPluginManager().registerEvents(new CustomZombieDeathListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ZombieDeathListener(), this);
         Bukkit.getPluginManager().registerEvents(new JungleZombie(), this);
         getLogger().info("Jungle Zombie enabled");
       }, 1L);
@@ -176,7 +180,7 @@ public final class Main extends JavaPlugin implements Listener {
             .withName("SnowZombieAI")
         );
 
-        Bukkit.getPluginManager().registerEvents(new CustomZombieDeathListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ZombieDeathListener(), this);
         Bukkit.getPluginManager().registerEvents(new SnowZombie(), this);
         getLogger().info("Snow Zombie enabled");
       }, 1L);
@@ -200,16 +204,16 @@ public final class Main extends JavaPlugin implements Listener {
   @Override
   public void onDisable() {
     if (getCustomConfig().getBoolean("enable-ice")) {
-      CauldronIceListeners.saveFilledIceCauldrons();
+      CauldronIceListener.saveFilledIceCauldrons();
     }
     if (getCustomConfig().getBoolean("enable-honey")) {
-      CauldronHoneyListeners.saveFilledHoneyCauldrons();
+      CauldronHoneyListener.saveFilledHoneyCauldrons();
     }
     if (getCustomConfig().getBoolean("copper-hopper")) {
-      HopperRegistry.saveHopperWithItemDisplay();
+      CopperHopperRegistry.saveHopperWithItemDisplay();
     }
     if (getCustomConfig().getBoolean("dyed-torches")) {
-      DyedTorchesRegistry.saveDyedTorchWithItemDisplay();
+      DyedTorchRegistry.saveDyedTorchWithItemDisplay();
     }
     if (getCustomConfig().getBoolean("jungle-zombie")) {
       JungleZombieAITrait.removeAllPoisonClouds();
