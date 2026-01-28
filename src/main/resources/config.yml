@@ -65,6 +65,9 @@ jungle-zombie: true
 # Item & Entity Gameplay Tweaks
 # --------------------------------------------------
 
+# Right-click a chipped/damaged anvil with an iron block to repair it
+repair-anvil: true
+
 # Glistering melons become edible and grant a short regeneration effect
 enable-edible-glistering-melon: true
 

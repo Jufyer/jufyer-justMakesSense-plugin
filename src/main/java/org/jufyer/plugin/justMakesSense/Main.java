@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jufyer.plugin.justMakesSense.features.anvil.AnvilRepairListener;
 import org.jufyer.plugin.justMakesSense.features.banner.BannerBoatListener;
 import org.jufyer.plugin.justMakesSense.features.cauldron.CauldronDispenserListener;
 import org.jufyer.plugin.justMakesSense.features.cauldron.CauldronHoneyListener;
@@ -199,6 +200,10 @@ public final class Main extends JavaPlugin implements Listener {
       getLogger().info("Melon Block update enabled");
     }
 
+    // Repair anvil with Iron Block
+    if (getCustomConfig().getBoolean("repair-anvil")) {
+      Bukkit.getPluginManager().registerEvents(new AnvilRepairListener(), this);
+    }
   }
 
   @Override
