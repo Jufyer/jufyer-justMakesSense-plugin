@@ -52,7 +52,7 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 
 ---
 
-### Zombie Variants
+## Zombie Variants
 
 * Two new Zombie variants: Jungle and Snow
 * The Jungle Zombie will summon poisonous Area Effect Clouds 
@@ -70,6 +70,13 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 * Shift-right-click again to remove the banner
 
 <p align="center"><img src="https://imgur.com/StpnqOT.png" alt="banners on boats"></p>
+
+---
+
+## Repairable anvils
+
+* Right-click a broken anvil with an iron block to repair it by one stage:
+* Damaged --> Chipped; Chipped --> Normal
 
 ---
 
