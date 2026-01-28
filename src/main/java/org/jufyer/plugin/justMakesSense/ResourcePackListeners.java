@@ -47,6 +47,13 @@ public class ResourcePackListeners implements Listener {
         ));
       }
 
+      if (Main.getInstance().getCustomConfig().getBoolean("melon-block-update")) {
+        packs.add(createPack(
+          "https://download.mc-packs.net/pack/17491c350c6404ed51afb39133ce7788871dcdf5.zip",
+          "17491c350c6404ed51afb39133ce7788871dcdf5"
+        ));
+      }
+
       if (!packs.isEmpty()) {
         ResourcePackRequest request = ResourcePackRequest.resourcePackRequest()
           .packs(packs)

@@ -147,6 +147,15 @@ H = Honeycomb
 
 ---
 
+## Edible Melon blocks
+
+* Right click on Melon blocks to eat a slice
+* You get the same Saturation and Food Level as you would get by eating a melon slice
+
+<p align="center"><img src="https://imgur.com/eXkw2AR.png"></p>
+
+---
+
 ## Mob Loot Tweaks
 
 * Goats drop mutton
@@ -169,37 +178,78 @@ All features can be configured individually.
 # Core Cauldron Features
 # --------------------------------------------------
 
+# Enable ice-related cauldron mechanics
 enable-ice: true
+
+# Enable honey interactions with cauldrons
 enable-honey: true
+
+# Allow removing dye from items using cauldrons
 enable-remove-dye: true
+
 
 # --------------------------------------------------
 # Cauldron Liquid Support
 # --------------------------------------------------
+# Controls which liquids can be used with cauldrons
+# and how dispensers interact with them
 
+# Allow dispensers to interact with cauldrons from below
 allow-interaction-from-below: true
+
+# Enable water cauldron behavior
 enable-water: true
+
+# Enable lava cauldron behavior
 enable-lava: true
+
+# Enable powder snow cauldron behavior
 enable-powder-snow: true
+
 
 # --------------------------------------------------
 # Copper Hopper Mechanics
 # --------------------------------------------------
 
+# Enable copper hopper functionality
 copper-hopper: true
 
-# Number of items moved before wax is removed
-# 0 = wax never wears off
-copper-hopper-item-count: 10
+# Number of items ejected before the hopper loses its wax layer
+# (0 = never loses wax, 1000 = vanilla-like default)
+copper-hopper-item-count: 1000
+
 
 # --------------------------------------------------
-# Item and Entity Gameplay Tweaks
+# New Mobs
 # --------------------------------------------------
 
+# Be careful! The following features require the plugin "Citizens" which can be downloaded for free here:
+# https://ci.citizensnpcs.co/job/Citizens2/
+
+# Snow Zombies give you the poison effect
+snow-zombie: true
+
+# Jungle Zombies give you the poison effect
+jungle-zombie: true
+
+
+# --------------------------------------------------
+# Item & Entity Gameplay Tweaks
+# --------------------------------------------------
+
+# Glistering melons become edible and grant a short regeneration effect
 enable-edible-glistering-melon: true
+
+# Allow banners to be placed on boats
 banner-on-boats: true
+
+# Husks have a chance to drop sand
 husks-drop-sand: true
+
+# Goats drop mutton when killed
 goat-drop-mutton: true
+
+# Enable dyed torch variants
 dyed-torches: true
 ```
 

@@ -48,11 +48,28 @@ copper-hopper-item-count: 1000
 
 
 # --------------------------------------------------
+# New Mobs
+# --------------------------------------------------
+
+# Be careful! The following features require the plugin "Citizens" which can be downloaded for free here:
+# https://ci.citizensnpcs.co/job/Citizens2/
+
+# Snow Zombies give you the poison effect
+snow-zombie: true
+
+# Jungle Zombies give you the poison effect
+jungle-zombie: true
+
+
+# --------------------------------------------------
 # Item & Entity Gameplay Tweaks
 # --------------------------------------------------
 
 # Glistering melons become edible and grant a short regeneration effect
 enable-edible-glistering-melon: true
+
+# Right click on melon blocks to eat a slice
+melon-block-update: true
 
 # Allow banners to be placed on boats
 banner-on-boats: true
@@ -65,6 +82,3 @@ goat-drop-mutton: true
 
 # Enable dyed torch variants
 dyed-torches: true
-
-snow-zombie: true
-jungle-zombie: true

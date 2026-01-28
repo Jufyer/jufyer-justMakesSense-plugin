@@ -22,6 +22,7 @@ import org.jufyer.plugin.justMakesSense.dyedTorches.listener.DyedTorchItemListen
 import org.jufyer.plugin.justMakesSense.glisteringMelon.GlisteringMelonEatListeners;
 import org.jufyer.plugin.justMakesSense.goat.GoatDropMuttonListener;
 import org.jufyer.plugin.justMakesSense.husk.HuskDropSandListener;
+import org.jufyer.plugin.justMakesSense.melon.MelonBlockInteractionListener;
 import org.jufyer.plugin.justMakesSense.zombie.*;
 
 import java.util.HashMap;
@@ -34,15 +35,6 @@ public final class Main extends JavaPlugin implements Listener {
   public static Main getInstance() {
     return instance;
   }
-
-  //Banner on boats
-  // https://download.mc-packs.net/pack/71d29e4e502078d9fc7fc8846b55be9c8fb13471.zip
-  // 71d29e4e502078d9fc7fc8846b55be9c8fb13471
-
-  //Copper Hoppers
-  // https://download.mc-packs.net/pack/8dc9547f7273b0d2b8d24987d1c758b1eb74dfac.zip
-  // 8dc9547f7273b0d2b8d24987d1c758b1eb74dfac
-
 
   public static Set<Location> loadedCopperHoppers = new HashSet<>();
   public static Set<Chunk> scannedChunks = new HashSet<>();
@@ -149,17 +141,22 @@ public final class Main extends JavaPlugin implements Listener {
       }, 1L);
     }
 
-    // Jungle Zombie
-    if (getCustomConfig().getBoolean("jungle-zombie")) {
-      Bukkit.getScheduler().runTaskLater(this, () -> {
+    Bukkit.getScheduler().runTaskLater(this, () -> {
+      if (getCustomConfig().getBoolean("jungle-zombie") || getCustomConfig().getBoolean("snow-zombie")){
         if (!Bukkit.getPluginManager().isPluginEnabled("Citizens")) {
-          getLogger().severe("Citizens not found! Plugin disabled.");
+          getLogger().severe("Citizens not found but the enabled features require it! Plugin disabled.");
+          getLogger().severe("Look at the config and turn of any feature that requires Citizens or install the plugin from this link for free:");
+          getLogger().severe("https://ci.citizensnpcs.co/job/Citizens2/");
           getServer().getPluginManager().disablePlugin(this);
-          return;
         }else {
           getLogger().info("Successfully loaded Citizens.");
         }
+      }
+    }, 1L);
 
+    // Jungle Zombie
+    if (getCustomConfig().getBoolean("jungle-zombie")) {
+      Bukkit.getScheduler().runTaskLater(this, () -> {
         net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(
           net.citizensnpcs.api.trait.TraitInfo.create(JungleZombieAITrait.class)
             .withName("JungleZombieAI")
@@ -167,20 +164,13 @@ public final class Main extends JavaPlugin implements Listener {
 
         Bukkit.getPluginManager().registerEvents(new CustomZombieDeathListener(), this);
         Bukkit.getPluginManager().registerEvents(new JungleZombie(), this);
+        getLogger().info("Jungle Zombie enabled");
       }, 1L);
     }
 
     // Snow Zombie
     if (getCustomConfig().getBoolean("snow-zombie")) {
       Bukkit.getScheduler().runTaskLater(this, () -> {
-        if (!Bukkit.getPluginManager().isPluginEnabled("Citizens")) {
-          getLogger().severe("Citizens not found! Plugin disabled.");
-          getServer().getPluginManager().disablePlugin(this);
-          return;
-        }else {
-          getLogger().info("Successfully loaded Citizens.");
-        }
-
         net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(
           net.citizensnpcs.api.trait.TraitInfo.create(SnowZombieAITrait.class)
             .withName("SnowZombieAI")
@@ -188,8 +178,16 @@ public final class Main extends JavaPlugin implements Listener {
 
         Bukkit.getPluginManager().registerEvents(new CustomZombieDeathListener(), this);
         Bukkit.getPluginManager().registerEvents(new SnowZombie(), this);
+        getLogger().info("Snow Zombie enabled");
       }, 1L);
     }
+
+    // Right click on melon blocks to eat a slice
+    if (getCustomConfig().getBoolean("melon-block-update")) {
+      Bukkit.getPluginManager().registerEvents(new MelonBlockInteractionListener(), this);
+      MelonBlockInteractionListener.preserveStairShape();
+    }
+
   }
 
   @Override

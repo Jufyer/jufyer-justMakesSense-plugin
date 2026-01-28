@@ -51,7 +51,7 @@ bukkitPluginYaml {
   load = BukkitPluginYaml.PluginLoadOrder.STARTUP
   authors.add("Jufyer")
   apiVersion = "1.21"
-  depend.add("Citizens")
+  softDepend.add("Citizens")
   commands {
 
   }
