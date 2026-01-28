@@ -85,3 +85,6 @@ goat-drop-mutton: true
 
 # Enable dyed torch variants
 dyed-torches: true
+
+# Protect your own pets by not allowing to attack them when you are not sneaking
+protect-pets: true

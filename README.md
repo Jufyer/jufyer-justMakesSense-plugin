@@ -171,6 +171,13 @@ H = Honeycomb
 
 ---
 
+## Pet protection
+
+* If you are not sneaking you can't damage your own pet
+* --> if you are sneaking you can damage your pet
+
+---
+
 ## Configuration
 
 All features can be configured individually.
@@ -263,6 +270,9 @@ goat-drop-mutton: true
 
 # Enable dyed torch variants
 dyed-torches: true
+
+# Protect your own pets by not allowing to attack them when you are not sneaking
+protect-pets: true
 ```
 
 ---

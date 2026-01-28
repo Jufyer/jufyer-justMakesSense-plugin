@@ -20,6 +20,7 @@ import org.jufyer.plugin.justMakesSense.features.copperhopper.listener.CopperHop
 import org.jufyer.plugin.justMakesSense.features.dyedtorches.DyedTorchRegistry;
 import org.jufyer.plugin.justMakesSense.features.dyedtorches.listener.DyedTorchBlockListener;
 import org.jufyer.plugin.justMakesSense.features.dyedtorches.listener.DyedTorchItemListener;
+import org.jufyer.plugin.justMakesSense.features.mobs.pets.PetProtectListener;
 import org.jufyer.plugin.justMakesSense.features.mobs.zombie.jungle.JungleZombie;
 import org.jufyer.plugin.justMakesSense.features.mobs.zombie.jungle.JungleZombieAITrait;
 import org.jufyer.plugin.justMakesSense.features.mobs.zombie.snow.SnowZombie;
@@ -203,6 +204,13 @@ public final class Main extends JavaPlugin implements Listener {
     // Repair anvil with Iron Block
     if (getCustomConfig().getBoolean("repair-anvil")) {
       Bukkit.getPluginManager().registerEvents(new AnvilRepairListener(), this);
+      getLogger().info("Anvil repair enabled");
+    }
+
+    // Protect Pets
+    if (getCustomConfig().getBoolean("protect-pets")) {
+      Bukkit.getPluginManager().registerEvents(new PetProtectListener(), this);
+      getLogger().info("Protect pets enabled");
     }
   }
 
