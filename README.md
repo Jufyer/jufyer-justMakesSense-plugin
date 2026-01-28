@@ -240,6 +240,9 @@ jungle-zombie: true
 # Glistering melons become edible and grant a short regeneration effect
 enable-edible-glistering-melon: true
 
+# Right click on melon blocks to eat a slice
+melon-block-update: true
+
 # Allow banners to be placed on boats
 banner-on-boats: true
 
