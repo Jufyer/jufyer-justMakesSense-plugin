@@ -20,18 +20,17 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 * After 1–5 minutes, a Honey Block appears inside the cauldron
 * Honey can be removed manually or extracted using hoppers
 
-<p align="center"><img src="https://imgur.com/GBZps4f.png"></p>
+<p align="center"><img src="https://imgur.com/GBZps4f.png" alt="honey in cauldron"></p>
 
 ---
 
 ### Ice Formation
 
 * If a water-filled cauldron is placed in a biome where water can freeze:
-
   * After 1–5 minutes, the water turns into an Ice Block
 * Ice can be collected manually or via hoppers
 
-<p align="center"><img src="https://imgur.com/yyjTMLp.png"></p>
+<p align="center"><img src="https://imgur.com/yyjTMLp.png" alt="ice in cauldron"></p>
 
 ---
 
@@ -49,7 +48,7 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 * Supports water, lava, and powder snow
 * Optional interaction from below
 
-<p align="center"><img src="https://imgur.com/tGTZzQS.png"></p>
+<p align="center"><img src="https://imgur.com/tGTZzQS.png" alt="dispenser interaction"></p>
 
 ---
 
@@ -59,7 +58,7 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 * The Jungle Zombie will summon poisonous Area Effect Clouds 
 * The Snow Zombie will summon slowness Area Effect Clouds
 
-<p align="center"><img src="https://imgur.com/TEob75u.png"></p>
+<p align="center"><img src="https://imgur.com/TEob75u.png" alt="zombie variants"></p>
 
 ---
 
@@ -70,7 +69,7 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 * Only one player can ride the boat while a banner is present
 * Shift-right-click again to remove the banner
 
-<p align="center"><img src="https://imgur.com/StpnqOT.png"></p>
+<p align="center"><img src="https://imgur.com/StpnqOT.png" alt="banners on boats"></p>
 
 ---
 
@@ -78,7 +77,7 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 
 Copper Hoppers are upgraded hoppers with different transfer speeds depending on their oxidation state.
 
-<p align="center"><img src="https://imgur.com/peLIGKg.png"></p>
+<p align="center"><img src="https://imgur.com/peLIGKg.png" alt="copper hoppers"></p>
 
 ### Variants and Speeds
 
@@ -135,7 +134,7 @@ H = Honeycomb
 * Produces a dyed torch variant
 * Decorative feature only
 
-<p align="center"><img src="https://imgur.com/Z4rKP0B.png"></p>
+<p align="center"><img src="https://imgur.com/Z4rKP0B.png" alt="dyed torches"></p>
 
 ---
 
@@ -152,7 +151,7 @@ H = Honeycomb
 * Right click on Melon blocks to eat a slice
 * You get the same Saturation and Food Level as you would get by eating a melon slice
 
-<p align="center"><img src="https://imgur.com/eXkw2AR.png"></p>
+<p align="center"><img src="https://imgur.com/eXkw2AR.png" alt="edible melon blocks"></p>
 
 ---
 
@@ -161,7 +160,7 @@ H = Honeycomb
 * Goats drop mutton
 * Husks have a chance to drop sand
 
-<p align="center"><img src="https://imgur.com/E35zJqO.png"></p>
+<p align="center"><img src="https://imgur.com/E35zJqO.png" alt="Mob loot tweaks"></p>
 
 ---
 
