@@ -216,9 +216,8 @@ public final class Main extends JavaPlugin implements Listener {
     }
 
     // Update-checker
-    //TODO: Update resource id
     if (getCustomConfig().getBoolean("update-checker")) {
-      new UpdateChecker(this, 0000).getVersion(latestVersion -> {
+      new UpdateChecker(this, 132176).getVersion(latestVersion -> {
         String currentVersion = this.getPluginMeta().getVersion();
 
         if (currentVersion.equalsIgnoreCase(latestVersion)) {
