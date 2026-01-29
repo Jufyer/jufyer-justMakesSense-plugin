@@ -220,7 +220,10 @@ public final class Main extends JavaPlugin implements Listener {
       new UpdateChecker(this, 132176).getVersion(latestVersion -> {
         String currentVersion = this.getPluginMeta().getVersion();
 
-        if (currentVersion.equalsIgnoreCase(latestVersion)) {
+        String current = this.getPluginMeta().getVersion().replace("v", "");
+        String latest = latestVersion.replace("v", "");
+
+        if (current.equalsIgnoreCase(latest)) {
           getLogger().info("You are using the latest version.");
         } else {
           getLogger().warning("A new update is available: " + latestVersion);
