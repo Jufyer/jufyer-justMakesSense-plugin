@@ -228,7 +228,7 @@ public final class Main extends JavaPlugin implements Listener {
         } else {
           getLogger().warning("A new update is available: " + latestVersion);
           getLogger().warning("Current version: " + currentVersion);
-          getLogger().warning("Download: https://www.spigotmc.org/resources/justmakesense.123456/");
+          getLogger().warning("Download: https://www.spigotmc.org/resources/justmakesense.132176/");
         }
       });
     }
