@@ -2,6 +2,9 @@
 # "Just Makes Sense" Configuration
 # ==================================================
 
+# Enable the update checker (recommended for bug fixes and new features)
+update-checker: true
+
 # --------------------------------------------------
 # Core Cauldron Features
 # --------------------------------------------------

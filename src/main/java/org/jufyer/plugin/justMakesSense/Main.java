@@ -30,6 +30,8 @@ import org.jufyer.plugin.justMakesSense.features.mobs.goat.GoatDropListener;
 import org.jufyer.plugin.justMakesSense.features.mobs.husk.HuskDropListener;
 import org.jufyer.plugin.justMakesSense.features.melon.MelonBlockInteractionListener;
 import org.jufyer.plugin.justMakesSense.features.mobs.zombie.*;
+import org.jufyer.plugin.justMakesSense.util.Metrics;
+import org.jufyer.plugin.justMakesSense.util.UpdateChecker;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -212,6 +214,25 @@ public final class Main extends JavaPlugin implements Listener {
       Bukkit.getPluginManager().registerEvents(new PetProtectListener(), this);
       getLogger().info("Protect pets enabled");
     }
+
+    // Update-checker
+    //TODO: Update resource id
+    if (getCustomConfig().getBoolean("update-checker")) {
+      new UpdateChecker(this, 0000).getVersion(latestVersion -> {
+        String currentVersion = this.getPluginMeta().getVersion();
+
+        if (currentVersion.equalsIgnoreCase(latestVersion)) {
+          getLogger().info("You are using the latest version.");
+        } else {
+          getLogger().warning("A new update is available: " + latestVersion);
+          getLogger().warning("Current version: " + currentVersion);
+          getLogger().warning("Download: https://www.spigotmc.org/resources/justmakesense.123456/");
+        }
+      });
+    }
+
+    // bStats
+    setupStatistics();
   }
 
   @Override
@@ -237,6 +258,35 @@ public final class Main extends JavaPlugin implements Listener {
     if (getCustomConfig().getBoolean("melon-block-update")) {
       MelonBlockInteractionListener.saveMelonBlockWithItemDisplay();
     }
+  }
+
+  private void setupStatistics() {
+    int pluginId = 29155;
+    Metrics metrics = new Metrics(this, pluginId);
+
+    metrics.addCustomChart(new Metrics.SimplePie("cauldron_ice_enabled", () ->
+      String.valueOf(getConfig().getBoolean("enable-ice", true))));
+
+    metrics.addCustomChart(new Metrics.SimplePie("cauldron_honey_enabled", () ->
+      String.valueOf(getConfig().getBoolean("enable-honey", true))));
+
+    metrics.addCustomChart(new Metrics.SimplePie("copper_hoppers_enabled", () ->
+      String.valueOf(getConfig().getBoolean("copper-hopper", true))));
+
+    metrics.addCustomChart(new Metrics.SimplePie("custom_zombies_enabled", () -> {
+      boolean snow = getConfig().getBoolean("snow-zombie", true);
+      boolean jungle = getConfig().getBoolean("jungle-zombie", true);
+      if (snow && jungle) return "Both";
+      if (snow) return "Only Snow";
+      if (jungle) return "Only Jungle";
+      return "None";
+    }));
+
+    metrics.addCustomChart(new Metrics.SimplePie("pet_protection_enabled", () ->
+      String.valueOf(getConfig().getBoolean("protect-pets", true))));
+
+    metrics.addCustomChart(new Metrics.SimplePie("repair_anvil_enabled", () ->
+      String.valueOf(getConfig().getBoolean("repair-anvil", true))));
   }
 
   public FileConfiguration getCustomConfig() {

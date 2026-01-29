@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "org.jufyer.plugin"
-version = "1.0.0-SNAPSHOT"
+version = properties["projectVersion"] ?: "0.0.1"
 description = "JustMakesSense Minecraft Plugin by Jufyer"
 
 java {

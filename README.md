@@ -1,3 +1,5 @@
+<p align="center"><img src="https://imgur.com/TcdliLJ.png" alt="plugin banner"></p>
+
 # Just Makes Sense
 
 A Minecraft plugin that adds small, logical quality-of-life features that feel natural and vanilla-friendly.
@@ -274,6 +276,12 @@ dyed-torches: true
 # Protect your own pets by not allowing to attack them when you are not sneaking
 protect-pets: true
 ```
+
+---
+
+## This plugin is using bStats
+
+<p align="center"><img src="https://bstats.org/signatures/bukkit/jufyer-justMakesSense-plugin.svg" alt="bStats chart"></p>
 
 ---
 
