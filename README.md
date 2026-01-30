@@ -288,7 +288,7 @@ protect-pets: true
 ## Requirements
 
 * Minecraft 1.21 or newer
-* Paper or Spigot server
+* Paper
 
 ---
 
