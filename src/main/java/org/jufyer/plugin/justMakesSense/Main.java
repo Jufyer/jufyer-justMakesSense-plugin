@@ -30,6 +30,7 @@ import org.jufyer.plugin.justMakesSense.features.mobs.goat.GoatDropListener;
 import org.jufyer.plugin.justMakesSense.features.mobs.husk.HuskDropListener;
 import org.jufyer.plugin.justMakesSense.features.melon.MelonBlockInteractionListener;
 import org.jufyer.plugin.justMakesSense.features.mobs.zombie.*;
+import org.jufyer.plugin.justMakesSense.spigot.SpigotResourcePackListener;
 import org.jufyer.plugin.justMakesSense.util.Metrics;
 import org.jufyer.plugin.justMakesSense.util.UpdateChecker;
 
@@ -58,7 +59,24 @@ public final class Main extends JavaPlugin implements Listener {
     instance = this;
     saveDefaultConfig();
 
-    Bukkit.getPluginManager().registerEvents(new ResourcePackListeners(), this);
+    if (isPaper()) {
+      try {
+        Class<?> clazz = Class.forName(
+          "org.jufyer.plugin.justMakesSense.paper.PaperResourcePackListener"
+        );
+        Listener listener = (Listener) clazz.getDeclaredConstructor().newInstance();
+        Bukkit.getPluginManager().registerEvents(listener, this);
+      } catch (Exception e) {
+        getLogger().severe("Failed to load Paper resource pack listener");
+        e.printStackTrace();
+      }
+    } else {
+      Bukkit.getPluginManager().registerEvents(
+        new SpigotResourcePackListener(), this
+      );
+    }
+
+
     getLogger().info("The following features are enabled: ");
 
     // Cauldron Rework
@@ -218,12 +236,15 @@ public final class Main extends JavaPlugin implements Listener {
     // Update-checker
     if (getCustomConfig().getBoolean("update-checker")) {
       new UpdateChecker(this, 132176).getVersion(latestVersion -> {
-        String currentVersion = this.getPluginMeta().getVersion();
+        String currentVersion = this.getDescription().getVersion();
 
-        String current = this.getPluginMeta().getVersion().replace("v", "");
+        String current = currentVersion.replace("v", "");
+        current = current.replace(".", "");
+
         String latest = latestVersion.replace("v", "");
+        latest = latest.replace(".", "");
 
-        if (current.equalsIgnoreCase(latest)) {
+        if (Integer.parseInt(current) >= Integer.parseInt(latest)) {
           getLogger().info("You are using the latest version.");
         } else {
           getLogger().warning("A new update is available: " + latestVersion);
@@ -289,6 +310,15 @@ public final class Main extends JavaPlugin implements Listener {
 
     metrics.addCustomChart(new Metrics.SimplePie("repair_anvil_enabled", () ->
       String.valueOf(getConfig().getBoolean("repair-anvil", true))));
+  }
+
+  public static boolean isPaper() {
+    try {
+      Class.forName("com.destroystokyo.paper.PaperConfig");
+      return true;
+    } catch (ClassNotFoundException e) {
+      return false;
+    }
   }
 
   public FileConfiguration getCustomConfig() {

@@ -16,83 +16,83 @@ public class BannerBoatListener implements Listener {
   public static final NamespacedKey BANNER_ARMORSTAND_KEY = new NamespacedKey(Main.getInstance(), "BANNER_ARMORSTAND");
   public static final NamespacedKey TEMPORARY_BANNER_ARMORSTAND_KEY = new NamespacedKey(Main.getInstance(), "TEMPORARY_BANNER_ARMORSTAND");
 
+
+  /**
+   * @param location Location where the Armor Stand is summoned
+   * @return Armor Stand with no visibility, no gravity, no movement, no arms. Persistent
+   */
+  private ArmorStand spawnDummyArmorStand(Location location) {
+    ArmorStand as = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
+    as.setCanMove(false);
+    as.setVisible(false);
+    as.setGravity(false);
+    as.setBasePlate(false);
+    as.setArms(false);
+    as.setPersistent(true);
+
+    return as;
+  }
+
   @EventHandler
   public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
     Player player = event.getPlayer();
     Entity entity = event.getRightClicked();
 
-    if (entity instanceof Boat) {
-      if (player.isSneaking()) {
-        if (player.getItemInHand().getType().name().endsWith("_BANNER")) {
-          if (entity.getPassengers().toArray().length < 2) {
-            ItemStack banner = player.getItemInHand();
+    if (!(entity instanceof Boat)) return;
+    if (!(player.isSneaking())) return;
 
-            Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
-              if (player.getGameMode() != GameMode.CREATIVE){
-                player.getItemInHand().setAmount(player.getItemInHand().getAmount() -1);
-              }
-            }, 1);
+    if (player.getItemInHand().getType().name().endsWith("_BANNER")) {
+      if (entity.getPassengers().toArray().length < 2) {
+        ItemStack banner = player.getItemInHand();
 
-            if (banner.getType() == Material.WHITE_BANNER) {
-              ItemMeta bannerMeta = banner.getItemMeta();
-              bannerMeta.setCustomModelData(Main.CMDWhiteBoatBanner);
-              banner.setItemMeta(bannerMeta);
-            }
-
-            ArmorStand as = (ArmorStand) entity.getWorld().spawnEntity(entity.getLocation(), EntityType.ARMOR_STAND);
-            as.setCanMove(false);
-            as.setVisible(false);
-            as.setGravity(false);
-            as.setBasePlate(false);
-            as.setArms(false);
-            as.setPersistent(true);
-
-            as.setHelmet(banner);
-
-            ItemStack helmet = as.getHelmet();
-            helmet.setAmount(1);
-            as.setHelmet(helmet);
-
-            as.getPersistentDataContainer().set(BANNER_ARMORSTAND_KEY, PersistentDataType.BYTE, (byte) 1);
-
-            ArmorStand tempAs = (ArmorStand) entity.getWorld().spawnEntity(entity.getLocation(), EntityType.ARMOR_STAND);
-            tempAs.setCanMove(false);
-            tempAs.setVisible(false);
-            tempAs.setGravity(false);
-            tempAs.setBasePlate(false);
-            tempAs.setArms(false);
-            tempAs.setPersistent(true);
-
-            tempAs.getPersistentDataContainer().set(TEMPORARY_BANNER_ARMORSTAND_KEY, PersistentDataType.BYTE, (byte) 1);
-
-            entity.addPassenger(tempAs);
-            entity.addPassenger(as);
-
-            tempAs.setRotation(entity.getYaw(), entity.getPitch());
-            as.setRotation(entity.getYaw(), entity.getPitch());
+        Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
+          if (player.getGameMode() != GameMode.CREATIVE) {
+            player.getItemInHand().setAmount(player.getItemInHand().getAmount() - 1);
           }
-        } else if (!entity.getPassengers().isEmpty()) {
-          if (entity.getPassengers().get(0) instanceof ArmorStand) {
-            Entity passenger = entity.getPassengers().get(0);
-            if (passenger.getPersistentDataContainer().has(TEMPORARY_BANNER_ARMORSTAND_KEY, PersistentDataType.BYTE)) {
-              passenger.remove();
-              ArmorStand as = (ArmorStand) entity.getPassengers().getLast();
-              ItemStack item = as.getHelmet();
-              as.setHelmet(new ItemStack(Material.AIR));
-              Location loc = as.getLocation();
+        }, 1);
 
-              entity.getPassengers().getLast().remove();
-              loc.getWorld().dropItemNaturally(loc, item);
-            }
-          }
+        if (banner.getType() == Material.WHITE_BANNER) {
+          ItemMeta bannerMeta = banner.getItemMeta();
+          bannerMeta.setCustomModelData(Main.CMDWhiteBoatBanner);
+          banner.setItemMeta(bannerMeta);
         }
-      } else if (!entity.getPassengers().isEmpty()) {
-        if (entity.getPassengers().get(0) instanceof ArmorStand) {
-          Entity passenger = entity.getPassengers().get(0);
-          if (passenger.getPersistentDataContainer().has(TEMPORARY_BANNER_ARMORSTAND_KEY, PersistentDataType.BYTE)) {
-            passenger.remove();
-            entity.addPassenger(player);
-          }
+
+        ArmorStand as = spawnDummyArmorStand(entity.getLocation());
+        as.setHelmet(banner);
+        ItemStack helmet = as.getHelmet();
+        helmet.setAmount(1);
+        as.setHelmet(helmet);
+        as.getPersistentDataContainer().set(BANNER_ARMORSTAND_KEY, PersistentDataType.BYTE, (byte) 1);
+
+        ArmorStand tempAs = spawnDummyArmorStand(entity.getLocation());
+        tempAs.getPersistentDataContainer().set(TEMPORARY_BANNER_ARMORSTAND_KEY, PersistentDataType.BYTE, (byte) 1);
+
+        entity.addPassenger(tempAs);
+        entity.addPassenger(as);
+
+        tempAs.setRotation(entity.getYaw(), entity.getPitch());
+        as.setRotation(entity.getYaw(), entity.getPitch());
+      }
+    } else if (!entity.getPassengers().isEmpty()) {
+      if (entity.getPassengers().get(0) instanceof ArmorStand) {
+        Entity passenger = entity.getPassengers().get(0);
+        if (passenger.getPersistentDataContainer().has(TEMPORARY_BANNER_ARMORSTAND_KEY, PersistentDataType.BYTE)) {
+          passenger.remove();
+          ArmorStand as = (ArmorStand) entity.getPassengers().getLast();
+          ItemStack item = as.getHelmet();
+          as.setHelmet(new ItemStack(Material.AIR));
+          Location loc = as.getLocation();
+
+          entity.getPassengers().getLast().remove();
+          loc.getWorld().dropItemNaturally(loc, item);
+        }
+      }
+    } else if (!entity.getPassengers().isEmpty()) {
+      if (entity.getPassengers().get(0) instanceof ArmorStand) {
+        Entity passenger = entity.getPassengers().get(0);
+        if (passenger.getPersistentDataContainer().has(TEMPORARY_BANNER_ARMORSTAND_KEY, PersistentDataType.BYTE)) {
+          passenger.remove();
+          entity.addPassenger(player);
         }
       }
     }
@@ -100,79 +100,38 @@ public class BannerBoatListener implements Listener {
 
   @EventHandler
   public void onPlayerExitVehicle(VehicleExitEvent event) {
-    if (event.getExited() instanceof Player) {
-      if (event.getVehicle() instanceof Boat boat) {
-        for (Entity passenger : boat.getPassengers()) {
-          if (passenger instanceof ArmorStand armorStand &&
-            armorStand.getPersistentDataContainer().has(BANNER_ARMORSTAND_KEY, PersistentDataType.BYTE)) {
-            ArmorStand tempAs = (ArmorStand) boat.getWorld().spawnEntity(boat.getLocation(), EntityType.ARMOR_STAND);
-            tempAs.setCanMove(false);
-            tempAs.setVisible(false);
-            tempAs.setGravity(false);
-            tempAs.setBasePlate(false);
-            tempAs.setArms(false);
-            tempAs.setPersistent(true);
+    if (!(event.getExited() instanceof Player)) return;
+    if (!(event.getVehicle() instanceof Boat boat)) return;
 
-            tempAs.getPersistentDataContainer().set(TEMPORARY_BANNER_ARMORSTAND_KEY, PersistentDataType.BYTE, (byte) 1);
+    for (Entity passenger : boat.getPassengers()) {
+      if (passenger instanceof ArmorStand armorStand &&
+        armorStand.getPersistentDataContainer().has(BANNER_ARMORSTAND_KEY, PersistentDataType.BYTE)) {
 
-            ArmorStand bannerArmorStand = (CraftArmorStand) boat.getPassengers().getLast();
-            ItemStack banner = bannerArmorStand.getHelmet();
+        ArmorStand tempAs = spawnDummyArmorStand(boat.getLocation());
+        tempAs.getPersistentDataContainer().set(TEMPORARY_BANNER_ARMORSTAND_KEY, PersistentDataType.BYTE, (byte) 1);
 
-            if (banner.getType() == Material.WHITE_BANNER) {
-              ItemMeta bannerMeta = banner.getItemMeta();
-              bannerMeta.setCustomModelData(Main.CMDWhiteBoatBanner);
-              banner.setItemMeta(bannerMeta);
-            }
+        ArmorStand bannerArmorStand = (CraftArmorStand) boat.getPassengers().getLast();
+        ItemStack banner = bannerArmorStand.getHelmet();
 
-            ArmorStand as = (ArmorStand) boat.getWorld().spawnEntity(boat.getLocation(), EntityType.ARMOR_STAND);
-            as.setCanMove(false);
-            as.setVisible(false);
-            as.setGravity(false);
-            as.setBasePlate(false);
-            as.setArms(false);
-            as.setPersistent(true);
-            as.setHelmet(banner);
-            as.getPersistentDataContainer().set(BANNER_ARMORSTAND_KEY, PersistentDataType.BYTE, (byte) 1);
-
-            boat.getPassengers().getLast().remove();
-
-
-            boat.addPassenger(tempAs);
-            boat.addPassenger(as);
-
-            tempAs.setRotation(boat.getYaw(), boat.getPitch());
-            as.setRotation(boat.getYaw(), boat.getPitch());
-            break;
-          }
+        if (banner.getType() == Material.WHITE_BANNER) {
+          ItemMeta bannerMeta = banner.getItemMeta();
+          bannerMeta.setCustomModelData(Main.CMDWhiteBoatBanner);
+          banner.setItemMeta(bannerMeta);
         }
+
+        ArmorStand as = spawnDummyArmorStand(boat.getLocation());
+        as.setHelmet(banner);
+        as.getPersistentDataContainer().set(BANNER_ARMORSTAND_KEY, PersistentDataType.BYTE, (byte) 1);
+
+        boat.getPassengers().getLast().remove();
+
+        boat.addPassenger(tempAs);
+        boat.addPassenger(as);
+
+        tempAs.setRotation(boat.getYaw(), boat.getPitch());
+        as.setRotation(boat.getYaw(), boat.getPitch());
+        break;
       }
     }
   }
-
-//  @EventHandler
-//  public void onPlayerJoin(PlayerJoinEvent event) {
-//    Player player = event.getPlayer();
-//
-//    Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
-//      if (player.isOnline()) {
-//        sendModernResourcePack(player);
-//      }
-//    }, 10L);
-//  }
-
-//  public void sendModernResourcePack(Player player) {
-//    ResourcePackInfo packInfo = ResourcePackInfo.resourcePackInfo()
-//      .id(UUID.randomUUID())
-//      .uri(URI.create("https://download.mc-packs.net/pack/1a58c4e4d70af41c60b44dc9a2f298f894865ce8.zip"))
-//      .hash("1a58c4e4d70af41c60b44dc9a2f298f894865ce8")
-//      .build();
-//
-//    ResourcePackRequest request = ResourcePackRequest.resourcePackRequest()
-//      .packs(packInfo)
-//      .required(true)
-//      .prompt(Component.text("This server requires a custom resource pack to play!", NamedTextColor.GREEN))
-//      .build();
-//
-//    player.sendResourcePacks(request);
-//  }
 }

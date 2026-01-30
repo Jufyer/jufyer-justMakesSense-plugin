@@ -1,7 +1,5 @@
 package org.jufyer.plugin.justMakesSense.features.dyedtorches;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.Style;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -43,7 +41,8 @@ public class DyedTorchRegistry {
         var customData = meta.getCustomModelDataComponent();
         customData.setFloats(List.of(customModelDataFloat));
         meta.setCustomModelDataComponent(customData);
-        meta.customName(Component.text(name, Style.empty()));
+        //meta.customName(Component.text(name, Style.empty()));
+        meta.setDisplayName(ChatColor.RESET + name);
         meta.getPersistentDataContainer().set(variant.getItemKey(), PersistentDataType.BYTE, (byte) 1);
         item.setItemMeta(meta);
       }

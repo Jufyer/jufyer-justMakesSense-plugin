@@ -254,23 +254,20 @@ public class CopperHopperBlockListener implements Listener {
     World world = loc.getWorld();
     if (world == null) return;
 
-    // Aktuelle Variante des Hoppers bestimmen
     CopperVariant currentVariant = getCopperVariant(hopper);
     if (currentVariant == null || isWaxed(currentVariant)) return;
-    if (currentVariant == CopperVariant.OXIDIZED) return; // Kann nicht weiter oxidieren
+    if (currentVariant == CopperVariant.OXIDIZED) return;
 
     int radius = 4;
     double nonWaxed = 0;
     double nonWaxedHigher = 0;
 
-    // 2. Einmaliger Scan der Umgebung (O(n³))
     for (int x = -radius; x <= radius; x++) {
       for (int y = -radius; y <= radius; y++) {
         for (int z = -radius; z <= radius; z++) {
           Block block = world.getBlockAt(loc.getBlockX() + x, loc.getBlockY() + y, loc.getBlockZ() + z);
 
           if (block.getType() == Material.HOPPER) {
-            // getState() ist teuer, nur aufrufen wenn nötig
             Hopper neighborHopper = (Hopper) block.getState();
             CopperVariant neighborVariant = getCopperVariant(neighborHopper);
 
@@ -285,7 +282,6 @@ public class CopperHopperBlockListener implements Listener {
       }
     }
 
-    // 3. Berechnung (Logik aus dem Original übernommen)
     nonWaxed++;
     nonWaxedHigher++;
 
@@ -294,7 +290,7 @@ public class CopperHopperBlockListener implements Listener {
     double c = (b + 1.0) / (a + 1.0);
     double m = (currentVariant == CopperVariant.NORMAL) ? 0.75 : 1.0;
 
-    double chance = m * (c * c); // Formel: mc^2
+    double chance = m * (c * c); // mc^2
 
     if (random.nextDouble() < chance) {
       updateToNextStage(hopper, currentVariant);

@@ -118,9 +118,10 @@ public class CauldronHoneyListener implements Listener {
         Location newLoc = oldLoc.clone().add(direction.getDirection()).toBlockLocation();
 
         Entity entity = Bukkit.getEntity(id);
-        if (entity != null) {
-          entity.teleport(newLoc.clone().add(0.12, 0.2, 0.12));
-        }
+        if (entity == null) return;
+
+        entity.teleport(newLoc.clone().add(0.12, 0.2, 0.12));
+
         moving.put(newLoc, id);
       }
     }

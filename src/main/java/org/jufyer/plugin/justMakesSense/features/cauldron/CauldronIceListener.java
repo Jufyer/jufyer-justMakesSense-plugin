@@ -47,17 +47,17 @@ public class CauldronIceListener implements Listener {
       for (int z = 0; z < 16; z++) {
         for (int y = minHeight; y < maxHeight; y++) {
           Block block = chunk.getBlock(x, y, z);
+          if (block.getType() != Material.WATER_CAULDRON) return;
 
-          if (block.getType() == Material.WATER_CAULDRON) {
-            Block cauldron = block;
-            if (isFreezingPossible(block.getBiome(), block.getLocation().getZ())) {
-              if (!filledIceCauldronEntities.containsKey(cauldron.getLocation().toBlockLocation()) && !fillingCauldrons.contains(cauldron.getLocation().toBlockLocation())) {
-                cauldronsWithWater.add(cauldron.getLocation());
-                fillingCauldrons.add(cauldron.getLocation().toBlockLocation());
-                createRunner(cauldron.getLocation().getBlock());
-              }
-            }
-          }
+          Block cauldron = block;
+
+          if (!isFreezingPossible(block.getBiome(), block.getLocation().getZ())) return;
+          if (filledIceCauldronEntities.containsKey(cauldron.getLocation().toBlockLocation())) return;
+          if (fillingCauldrons.contains(cauldron.getLocation().toBlockLocation())) return;
+
+          cauldronsWithWater.add(cauldron.getLocation());
+          fillingCauldrons.add(cauldron.getLocation().toBlockLocation());
+          createRunner(cauldron.getLocation().getBlock());
         }
       }
     }
@@ -75,15 +75,16 @@ public class CauldronIceListener implements Listener {
       for (int z = 0; z < 16; z++) {
         for (int y = minHeight; y < maxHeight; y++) {
           Block block = event.getFrom().add(x, y, z).getBlock();
-          if (block.getType() == Material.WATER_CAULDRON) {
-            Block cauldron = block;
-            if (isFreezingPossible(block.getBiome(), block.getLocation().getZ())) {
-              if (!filledIceCauldronEntities.containsKey(cauldron.getLocation().toBlockLocation()) && !fillingCauldrons.contains(cauldron.getLocation().toBlockLocation())) {
-                cauldronsWithWater.add(cauldron.getLocation());
-                fillingCauldrons.add(cauldron.getLocation().toBlockLocation());
-                createRunner(cauldron.getLocation().getBlock());
-              }
-            }
+          if (block.getType() != Material.WATER_CAULDRON) return;
+
+          Block cauldron = block;
+
+          if (!isFreezingPossible(block.getBiome(), block.getLocation().getZ())) return;
+
+          if (!filledIceCauldronEntities.containsKey(cauldron.getLocation().toBlockLocation()) && !fillingCauldrons.contains(cauldron.getLocation().toBlockLocation())) {
+            cauldronsWithWater.add(cauldron.getLocation());
+            fillingCauldrons.add(cauldron.getLocation().toBlockLocation());
+            createRunner(cauldron.getLocation().getBlock());
           }
         }
       }
@@ -94,7 +95,6 @@ public class CauldronIceListener implements Listener {
   public void onBlockBreak(BlockBreakEvent event) {
     Location loc = event.getBlock().getLocation().toBlockLocation();
 
-    // If the cauldron is broken
     if (event.getBlock().getType() == Material.CAULDRON) {
       removeIceDisplay(loc);
       fillingCauldrons.remove(loc);
@@ -261,7 +261,7 @@ public class CauldronIceListener implements Listener {
           if (biome112_128.equals(biome)) {
             if (112 <= height && height <= 128) {
               return true;
-            }else return false;
+            } else return false;
           }
         }
 
@@ -269,7 +269,7 @@ public class CauldronIceListener implements Listener {
           if (biome154_168.equals(biome)) {
             if (154 <= height && height <= 168) {
               return true;
-            }else return false;
+            } else return false;
           }
         }
 
@@ -277,7 +277,7 @@ public class CauldronIceListener implements Listener {
           if (biome192_208.equals(biome)) {
             if (192 <= height && height <= 208) {
               return true;
-            }else return false;
+            } else return false;
           }
         }
 
@@ -298,7 +298,11 @@ public class CauldronIceListener implements Listener {
       config.set("cauldrons." + i + ".uuid", entry.getValue().toString());
       i++;
     }
-    try { config.save(file); } catch (IOException e) { e.printStackTrace(); }
+    try {
+      config.save(file);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public static void loadFilledIceCauldrons() {
@@ -313,7 +317,6 @@ public class CauldronIceListener implements Listener {
         Location loc = config.getLocation("cauldrons." + key + ".location");
         String uuidStr = config.getString("cauldrons." + key + ".uuid");
 
-        // Safety check: ensure the location and world actually exist
         if (loc != null && loc.getWorld() != null && uuidStr != null) {
           filledIceCauldronEntities.put(loc.toBlockLocation(), UUID.fromString(uuidStr));
         }
