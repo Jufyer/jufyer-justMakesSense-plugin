@@ -18,6 +18,11 @@ enable-honey: true
 # Allow removing dye from items using cauldrons
 enable-remove-dye: true
 
+# Throw dirt into a Cauldron to turn it into Mud
+cauldron-mud: true
+
+# Throw concrete powder into a Cauldron to turn it into Concrete
+cauldron-concrete: true
 
 # --------------------------------------------------
 # Cauldron Liquid Support
@@ -91,3 +96,9 @@ dyed-torches: true
 
 # Protect your own pets by not allowing to attack them when you are not sneaking
 protect-pets: true
+
+# Setting a sponge on fire dries it out instantly
+sponge-ignite: true
+
+# Splashing a Water Bottle into lava converts it into obsidian
+water-bottles-convert-lava: true

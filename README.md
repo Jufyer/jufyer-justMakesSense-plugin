@@ -36,6 +36,13 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 
 ---
 
+### Mud & Concrete Production
+
+* Throw **Dirt** into a water-filled cauldron to turn it into **Mud**
+* Throw **Concrete Powder** into a water-filled cauldron to turn it into **Concrete**
+
+---
+
 ### Removing Dye with Water
 
 * Right-click a water-filled cauldron with any dyed item
@@ -82,7 +89,20 @@ Just Makes Sense enhances Minecraft with intuitive mechanics that many players e
 
 ---
 
-## Copper Hoppers
+## Instant Sponge Drying
+
+* Setting a **Wet Sponge** on fire (e.g. with Flint and Steel) dries it out instantly.
+* No more waiting for the furnace!
+
+---
+
+## Water Bottles vs. Lava
+
+* Splashing/Throwing a **Water Bottle** into lava converts the lava source into **Obsidian**.
+
+---
+
+## Copper Hoppers (1.21.9+ only)
 
 Copper Hoppers are upgraded hoppers with different transfer speeds depending on their oxidation state.
 
@@ -189,6 +209,9 @@ All features can be configured individually.
 # "Just Makes Sense" Configuration
 # ==================================================
 
+# Enable the update checker (recommended for bug fixes and new features)
+update-checker: true
+
 # --------------------------------------------------
 # Core Cauldron Features
 # --------------------------------------------------
@@ -202,6 +225,11 @@ enable-honey: true
 # Allow removing dye from items using cauldrons
 enable-remove-dye: true
 
+# Throw dirt into a Cauldron to turn it into Mud
+cauldron-mud: true
+
+# Throw concrete powder into a Cauldron to turn it into Concrete
+cauldron-concrete: true
 
 # --------------------------------------------------
 # Cauldron Liquid Support
@@ -275,6 +303,12 @@ dyed-torches: true
 
 # Protect your own pets by not allowing to attack them when you are not sneaking
 protect-pets: true
+
+# Setting a sponge on fire dries it out instantly
+sponge-ignite: true
+
+# Splashing a Water Bottle into lava converts it into obsidian
+water-bottles-convert-lava: true
 ```
 
 ---

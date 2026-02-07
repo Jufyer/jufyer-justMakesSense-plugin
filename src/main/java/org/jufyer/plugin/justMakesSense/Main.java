@@ -9,10 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jufyer.plugin.justMakesSense.features.anvil.AnvilRepairListener;
 import org.jufyer.plugin.justMakesSense.features.banner.BannerBoatListener;
-import org.jufyer.plugin.justMakesSense.features.cauldron.CauldronDispenserListener;
-import org.jufyer.plugin.justMakesSense.features.cauldron.CauldronHoneyListener;
-import org.jufyer.plugin.justMakesSense.features.cauldron.CauldronIceListener;
-import org.jufyer.plugin.justMakesSense.features.cauldron.CauldronDyeListener;
+import org.jufyer.plugin.justMakesSense.features.cauldron.*;
 import org.jufyer.plugin.justMakesSense.features.copperhopper.CopperHopperBlock;
 import org.jufyer.plugin.justMakesSense.features.copperhopper.CopperHopperRegistry;
 import org.jufyer.plugin.justMakesSense.features.copperhopper.listener.CopperHopperBlockListener;
@@ -30,6 +27,8 @@ import org.jufyer.plugin.justMakesSense.features.mobs.goat.GoatDropListener;
 import org.jufyer.plugin.justMakesSense.features.mobs.husk.HuskDropListener;
 import org.jufyer.plugin.justMakesSense.features.melon.MelonBlockInteractionListener;
 import org.jufyer.plugin.justMakesSense.features.mobs.zombie.*;
+import org.jufyer.plugin.justMakesSense.features.sponge.SpongeIgniteListener;
+import org.jufyer.plugin.justMakesSense.features.waterBottle.WatterBottleConvertLavaListener;
 import org.jufyer.plugin.justMakesSense.spigot.SpigotResourcePackListener;
 import org.jufyer.plugin.justMakesSense.util.Metrics;
 import org.jufyer.plugin.justMakesSense.util.UpdateChecker;
@@ -110,6 +109,16 @@ public final class Main extends JavaPlugin implements Listener {
 
     Bukkit.getPluginManager().registerEvents(new CauldronDispenserListener(), this);
 
+    if (getCustomConfig().getBoolean("cauldron-mud")) {
+      Bukkit.getPluginManager().registerEvents(new CauldronDirtListener(), this);
+      getLogger().info("Cauldron mud enabled");
+    }
+
+    if (getCustomConfig().getBoolean("cauldron-concrete")) {
+      Bukkit.getPluginManager().registerEvents(new CauldronConcreteListener(), this);
+      getLogger().info("Cauldron concrete enabled");
+    }
+
     // Glistering Melon
     if (getCustomConfig().getBoolean("enable-edible-glistering-melon")) {
       Bukkit.getPluginManager().registerEvents(new GlisteringMelonEatListener(), this);
@@ -125,12 +134,12 @@ public final class Main extends JavaPlugin implements Listener {
     // Copper Hopper
     if (getCustomConfig().getBoolean("copper-hopper")) {
       Bukkit.getScheduler().runTaskLater(this, () -> {
+        CopperHopperRegistry.addCopperHopperRecipes();
         CopperHopperRegistry.loadHopperWithItemDisplay();
         getLogger().info("Successfully loaded copper hoppers after world initialization.");
       }, 1L);
 
       CopperHopperRegistry.createCopperHopperItems();
-      CopperHopperRegistry.addCopperHopperRecipes();
 
       getServer().getPluginManager().registerEvents(new CopperHopperItemListener(), this);
       getServer().getPluginManager().registerEvents(new CopperHopperBlockListener(), this);
@@ -231,6 +240,18 @@ public final class Main extends JavaPlugin implements Listener {
     if (getCustomConfig().getBoolean("protect-pets")) {
       Bukkit.getPluginManager().registerEvents(new PetProtectListener(), this);
       getLogger().info("Protect pets enabled");
+    }
+
+    // Sponge ignite
+    if (getCustomConfig().getBoolean("sponge-ignite")) {
+      Bukkit.getPluginManager().registerEvents(new SpongeIgniteListener(), this);
+      getLogger().info("Sponge ignite enabled");
+    }
+
+    // Water Bottles Convert Lava
+    if (getCustomConfig().getBoolean("water-bottles-convert-lava")) {
+      Bukkit.getPluginManager().registerEvents(new WatterBottleConvertLavaListener(), this);
+      getLogger().info("Water Bottles Convert Lava enabled");
     }
 
     // Update-checker
