@@ -15,8 +15,18 @@ import org.bukkit.inventory.ItemStack;
 import org.jufyer.plugin.justMakesSense.Main;
 
 public class CauldronDirtListener implements Listener {
+
+  private final Main plugin;
+
+  public CauldronDirtListener(Main plugin) {
+    this.plugin = plugin;
+  }
+
   @EventHandler
   public void onPlayerDropItem(PlayerDropItemEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("cauldron-mud", event.getItemDrop().getWorld())) {
+      return;
+    }
     Item dirt = event.getItemDrop();
     if (dirt.getItemStack().getType() != Material.DIRT) {
       return;

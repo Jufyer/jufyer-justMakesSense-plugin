@@ -6,10 +6,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jufyer.plugin.justMakesSense.Main;
 
 public class HuskDropListener implements Listener {
   @EventHandler
   public void onEntityDeath(EntityDeathEvent event) {
+   if (!Main.getInstance().isFeatureEnabledInWorld("husks-drop-sand", event.getEntity().getWorld())) {
+     return;
+   }
+
    if (event.getEntity() instanceof Husk) {
      event.getDrops().add(new ItemStack(Material.SAND));
    }

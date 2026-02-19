@@ -15,6 +15,13 @@ import org.bukkit.inventory.ItemStack;
 import org.jufyer.plugin.justMakesSense.Main;
 
 public class CauldronConcreteListener implements Listener {
+
+  private final Main plugin;
+
+  public CauldronConcreteListener(Main plugin) {
+    this.plugin = plugin;
+  }
+
   private Material[] colouredConcrete = {
     Material.LIGHT_GRAY_CONCRETE,
     Material.GRAY_CONCRETE,
@@ -63,6 +70,9 @@ public class CauldronConcreteListener implements Listener {
 
   @EventHandler
   public void onPlayerDropItem(PlayerDropItemEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("cauldron-concrete", event.getItemDrop().getWorld())) {
+      return;
+    }
     Item drop = event.getItemDrop();
     if (!isDyedConcretePowder(drop.getItemStack().getType())) {
       return;

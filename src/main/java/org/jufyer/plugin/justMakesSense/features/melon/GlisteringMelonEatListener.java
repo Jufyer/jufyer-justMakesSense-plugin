@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.event.block.Action;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jufyer.plugin.justMakesSense.Main;
 
 public class GlisteringMelonEatListener implements Listener {
 
@@ -17,8 +18,18 @@ public class GlisteringMelonEatListener implements Listener {
   private static final float SATURATION = 14.4f;
   private static final boolean GIVE_REGEN = true;
 
+  private final Main plugin;
+
+  public GlisteringMelonEatListener(Main plugin) {
+    this.plugin = plugin;
+  }
+
   @EventHandler
   public void onUse(PlayerInteractEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("cauldron-concrete", event.getPlayer().getWorld())) {
+      return;
+    }
+
     if (event.getAction() != Action.RIGHT_CLICK_AIR &&
       event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 

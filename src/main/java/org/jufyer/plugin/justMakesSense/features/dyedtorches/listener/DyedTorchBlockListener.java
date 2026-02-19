@@ -14,6 +14,10 @@ public class DyedTorchBlockListener implements Listener {
   /* Registration */
   @EventHandler
   public void onChunkLoad(ChunkLoadEvent event) {
+    if (!Main.getInstance().isFeatureEnabledInWorld("dyed-torches", event.getWorld())) {
+      return;
+    }
+
     if (!Main.scannedChunks.contains(event.getChunk())) {
       Chunk chunk = event.getChunk();
 

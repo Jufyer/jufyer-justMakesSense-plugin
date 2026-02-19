@@ -26,12 +26,16 @@ public class CopperHopperBlockListener implements Listener {
   /* Block Logic */
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent event) {
-    Player player = event.getPlayer();
-    Action action = event.getAction();
     Block block = event.getClickedBlock();
+    if (block == null) return;
+
+    if (!Main.getInstance().isFeatureEnabledInWorld("copper-hopper", block.getWorld())) {
+      return;
+    }
+
     ItemStack itemStack = event.getItem();
 
-    if (player != null && action != null && itemStack != null && block != null && block.getType().equals(Material.HOPPER)) {
+    if (itemStack != null && block.getType().equals(Material.HOPPER)) {
       Hopper hopper = (Hopper) block.getState();
       Location location = block.getLocation().toBlockLocation();
       for (CopperVariant variant : CopperVariant.values()) {
@@ -300,6 +304,10 @@ public class CopperHopperBlockListener implements Listener {
   /* Registration */
   @EventHandler
   public void onChunkLoad(ChunkLoadEvent event) {
+    if (!Main.getInstance().isFeatureEnabledInWorld("copper-hopper", event.getWorld())) {
+      return;
+    }
+
     if (!Main.scannedChunks.contains(event.getChunk())) {
       Chunk chunk = event.getChunk();
 

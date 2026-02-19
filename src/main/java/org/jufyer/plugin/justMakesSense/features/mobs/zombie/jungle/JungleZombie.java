@@ -11,10 +11,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.jufyer.plugin.justMakesSense.Main;
 import org.jufyer.plugin.justMakesSense.features.mobs.zombie.SkinData;
 
 public class JungleZombie implements Listener {
   public static void spawn(Location loc) {
+    if (!Main.getInstance().isFeatureEnabledInWorld("jungle-zombie", loc.getWorld())) {
+      return;
+    }
+
     NPCRegistry registry = CitizensAPI.getNPCRegistry();
 
     NPC npc = registry.createNPC(EntityType.PLAYER, "Jungle Zombie");
@@ -44,6 +49,10 @@ public class JungleZombie implements Listener {
 
   @EventHandler
   public void onEntitySpawn(EntitySpawnEvent event) {
+    if (!Main.getInstance().isFeatureEnabledInWorld("jungle-zombie", event.getEntity().getWorld())) {
+      return;
+    }
+
     if (event.getEntity().getType().equals(EntityType.ZOMBIE)) {
       if (event.getLocation().getBlock().getBiome().equals(Biome.JUNGLE)
         || event.getLocation().getBlock().getBiome().equals(Biome.BAMBOO_JUNGLE)

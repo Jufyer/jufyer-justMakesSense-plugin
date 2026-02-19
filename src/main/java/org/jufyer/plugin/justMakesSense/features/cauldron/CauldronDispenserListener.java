@@ -20,8 +20,18 @@ import static org.jufyer.plugin.justMakesSense.features.cauldron.CauldronIceList
 
 public class CauldronDispenserListener implements Listener {
 
+  private final Main plugin;
+
+  public CauldronDispenserListener(Main plugin) {
+    this.plugin = plugin;
+  }
+
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onBlockDispense(BlockDispenseEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("cauldron-dispenser-support", event.getBlock().getWorld())) {
+      return;
+    }
+
     if (event.getBlock().getType() != Material.DISPENSER) {
       return;
     }
@@ -33,11 +43,6 @@ public class CauldronDispenserListener implements Listener {
 
     Directional directional = (Directional) blockData;
 
-    // Check if interaction from below is disabled
-    if (directional.getFacing() == BlockFace.DOWN &&
-      !Main.getInstance().getConfig().getBoolean("allow-interaction-from-below")) {
-      return;
-    }
 
     Block targetBlock = event.getBlock().getRelative(directional.getFacing());
 
@@ -60,21 +65,18 @@ public class CauldronDispenserListener implements Listener {
     // Handle bucket -> cauldron filling
     switch (itemType) {
       case WATER_BUCKET:
-        if (!Main.getInstance().getConfig().getBoolean("enable-water")) return;
         newCauldronType = Material.WATER_CAULDRON;
         replacementItem = Material.BUCKET;
         sound = Sound.ITEM_BUCKET_EMPTY;
         break;
 
       case LAVA_BUCKET:
-        if (!Main.getInstance().getConfig().getBoolean("enable-lava")) return;
         newCauldronType = Material.LAVA_CAULDRON;
         replacementItem = Material.BUCKET;
         sound = Sound.ITEM_BUCKET_EMPTY_LAVA;
         break;
 
       case POWDER_SNOW_BUCKET:
-        if (!Main.getInstance().getConfig().getBoolean("enable-powder-snow")) return;
         newCauldronType = Material.POWDER_SNOW_CAULDRON;
         replacementItem = Material.BUCKET;
         sound = Sound.ITEM_BUCKET_EMPTY_POWDER_SNOW;
@@ -88,19 +90,16 @@ public class CauldronDispenserListener implements Listener {
 
         switch (targetBlock.getType()) {
           case WATER_CAULDRON:
-            if (!Main.getInstance().getConfig().getBoolean("enable-water")) return;
             replacementItem = Material.WATER_BUCKET;
             sound = Sound.ITEM_BUCKET_FILL;
             break;
 
           case LAVA_CAULDRON:
-            if (!Main.getInstance().getConfig().getBoolean("enable-lava")) return;
             replacementItem = Material.LAVA_BUCKET;
             sound = Sound.ITEM_BUCKET_FILL_LAVA;
             break;
 
           case POWDER_SNOW_CAULDRON:
-            if (!Main.getInstance().getConfig().getBoolean("enable-powder-snow")) return;
             replacementItem = Material.POWDER_SNOW_BUCKET;
             sound = Sound.ITEM_BUCKET_FILL_POWDER_SNOW;
             break;

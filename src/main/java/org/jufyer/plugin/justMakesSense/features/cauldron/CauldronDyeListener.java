@@ -10,11 +10,21 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.jufyer.plugin.justMakesSense.Main;
 
 public class CauldronDyeListener implements Listener {
 
+  private final Main plugin;
+
+  public CauldronDyeListener(Main plugin) {
+    this.plugin = plugin;
+  }
+
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("enable-remove-dye", event.getPlayer().getWorld())) {
+      return;
+    }
     if (event.getClickedBlock() == null || !event.getAction().isRightClick()) return;
 
     Block block = event.getClickedBlock();

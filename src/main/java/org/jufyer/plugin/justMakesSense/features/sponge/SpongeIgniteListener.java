@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.jufyer.plugin.justMakesSense.Main;
 
 import javax.annotation.Nonnull;
 
@@ -16,6 +17,9 @@ public class SpongeIgniteListener implements Listener {
     Player player = event.getPlayer();
 
     if (event.getClickedBlock() == null) return;
+    if (!Main.getInstance().isFeatureEnabledInWorld("sponge-ignite", event.getClickedBlock().getWorld())) {
+      return;
+    }
     if (event.getItem() == null) return;
     if (event.getClickedBlock().getType() != Material.WET_SPONGE) return;
     if (!event.getAction().isRightClick()) return;

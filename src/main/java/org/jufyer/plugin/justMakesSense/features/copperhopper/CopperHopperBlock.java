@@ -39,6 +39,10 @@ public class CopperHopperBlock implements Listener {
     List<Location> toRemove = new ArrayList<>();
 
     for (Location loc : new ArrayList<>(Main.loadedCopperHoppers)) {
+      if (loc.getWorld() != null && !Main.getInstance().isFeatureEnabledInWorld("copper-hopper", loc.getWorld())) {
+        continue;
+      }
+
       Block block = loc.getBlock();
       if (!loc.isChunkLoaded() || !block.getType().equals(Material.HOPPER)) {
         toRemove.add(loc);
@@ -228,6 +232,12 @@ public class CopperHopperBlock implements Listener {
   // canacel noraml hopper
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onInventoryMoveItem(InventoryMoveItemEvent event) {
+    if (event.getDestination().getLocation() != null) {
+      if (!Main.getInstance().isFeatureEnabledInWorld("copper-hopper", event.getDestination().getLocation().getWorld())) {
+        return;
+      }
+    }
+
     InventoryHolder srcHolder = event.getSource().getHolder();
     InventoryHolder dstHolder = event.getDestination().getHolder();
 

@@ -33,8 +33,17 @@ public class CauldronHoneyListener implements Listener {
   public static final HashMap<Location, UUID> filledHoneyCauldronEntities = new HashMap<>();
   private final int checkRange = 10;
 
+  private final Main plugin;
+
+  public CauldronHoneyListener(Main plugin) {
+    this.plugin = plugin;
+  }
+
   @EventHandler
   public void onBlockPlace(BlockPlaceEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("enable-honey", event.getBlock().getWorld())) {
+      return;
+    }
     Block block = event.getBlockPlaced();
     if (block.getType() == Material.CAULDRON) {
       checkAndStartFilling(block);
@@ -57,6 +66,9 @@ public class CauldronHoneyListener implements Listener {
 
   @EventHandler
   public void onBlockBreak(BlockBreakEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("enable-honey", event.getBlock().getWorld())) {
+      return;
+    }
     Location loc = event.getBlock().getLocation().toBlockLocation();
 
     if (event.getBlock().getType() == Material.CAULDRON) {
@@ -72,6 +84,9 @@ public class CauldronHoneyListener implements Listener {
 
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("enable-honey", event.getPlayer().getWorld())) {
+      return;
+    }
     if (event.getClickedBlock() == null || !event.getAction().isRightClick()) return;
     Location loc = event.getClickedBlock().getLocation().toBlockLocation();
 
@@ -86,6 +101,9 @@ public class CauldronHoneyListener implements Listener {
 
   @EventHandler
   public void onHopperInventorySearch(HopperInventorySearchEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("enable-honey", event.getBlock().getWorld())) {
+      return;
+    }
     Location cauldronLoc = event.getBlock().getLocation().add(0, 1, 0).toBlockLocation();
 
     if (filledHoneyCauldronEntities.containsKey(cauldronLoc)) {
@@ -110,6 +128,9 @@ public class CauldronHoneyListener implements Listener {
   }
 
   private void handlePistonMove(List<Block> blocks, BlockFace direction) {
+    if (!plugin.isFeatureEnabledInWorld("enable-honey", blocks.getFirst().getWorld())) {
+      return;
+    }
     HashMap<Location, UUID> moving = new HashMap<>();
     for (Block b : blocks) {
       Location oldLoc = b.getLocation().toBlockLocation();

@@ -3,6 +3,7 @@ package org.jufyer.plugin.justMakesSense;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.event.Listener;
@@ -28,7 +29,7 @@ import org.jufyer.plugin.justMakesSense.features.mobs.husk.HuskDropListener;
 import org.jufyer.plugin.justMakesSense.features.melon.MelonBlockInteractionListener;
 import org.jufyer.plugin.justMakesSense.features.mobs.zombie.*;
 import org.jufyer.plugin.justMakesSense.features.sponge.SpongeIgniteListener;
-import org.jufyer.plugin.justMakesSense.features.waterBottle.WatterBottleConvertLavaListener;
+import org.jufyer.plugin.justMakesSense.features.waterbottle.WatterBottleConvertLavaListener;
 import org.jufyer.plugin.justMakesSense.spigot.SpigotResourcePackListener;
 import org.jufyer.plugin.justMakesSense.util.Metrics;
 import org.jufyer.plugin.justMakesSense.util.UpdateChecker;
@@ -37,7 +38,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class Main extends JavaPlugin implements Listener {
+public class Main extends JavaPlugin {
 
   private static Main instance;
   public static Main getInstance() {
@@ -75,14 +76,13 @@ public final class Main extends JavaPlugin implements Listener {
       );
     }
 
-
     getLogger().info("The following features are enabled: ");
 
     // Cauldron Rework
     // Ice Cauldrons
     if (getCustomConfig().getBoolean("enable-ice")){
       getLogger().info("Ice cauldrons enabled");
-      Bukkit.getPluginManager().registerEvents(new CauldronIceListener(), this);
+      Bukkit.getPluginManager().registerEvents(new CauldronIceListener(this), this);
 
       Bukkit.getScheduler().runTaskLater(this, () -> {
         CauldronIceListener.loadFilledIceCauldrons();
@@ -93,7 +93,7 @@ public final class Main extends JavaPlugin implements Listener {
     // Honey Cauldrons
     if (getCustomConfig().getBoolean("enable-honey")) {
       getLogger().info("Honey cauldrons enabled");
-      Bukkit.getPluginManager().registerEvents(new CauldronHoneyListener(), this);
+      Bukkit.getPluginManager().registerEvents(new CauldronHoneyListener(this), this);
 
       Bukkit.getScheduler().runTaskLater(this, () -> {
         CauldronHoneyListener.loadFilledHoneyCauldrons();
@@ -103,31 +103,34 @@ public final class Main extends JavaPlugin implements Listener {
 
     // Remove dye with cauldron
     if (getCustomConfig().getBoolean("enable-remove-dye")) {
-      Bukkit.getPluginManager().registerEvents(new CauldronDyeListener(), this);
+      Bukkit.getPluginManager().registerEvents(new CauldronDyeListener(this), this);
       getLogger().info("Remove-Dye cauldrons enabled");
     }
 
-    Bukkit.getPluginManager().registerEvents(new CauldronDispenserListener(), this);
+    if (getCustomConfig().getBoolean("cauldron-dispenser-support")) {
+      Bukkit.getPluginManager().registerEvents(new CauldronDispenserListener(this), this);
+      getLogger().info("Cauldron dispenser support enabled");
+    }
 
     if (getCustomConfig().getBoolean("cauldron-mud")) {
-      Bukkit.getPluginManager().registerEvents(new CauldronDirtListener(), this);
+      Bukkit.getPluginManager().registerEvents(new CauldronDirtListener(this), this);
       getLogger().info("Cauldron mud enabled");
     }
 
     if (getCustomConfig().getBoolean("cauldron-concrete")) {
-      Bukkit.getPluginManager().registerEvents(new CauldronConcreteListener(), this);
+      Bukkit.getPluginManager().registerEvents(new CauldronConcreteListener(this), this);
       getLogger().info("Cauldron concrete enabled");
     }
 
     // Glistering Melon
     if (getCustomConfig().getBoolean("enable-edible-glistering-melon")) {
-      Bukkit.getPluginManager().registerEvents(new GlisteringMelonEatListener(), this);
+      Bukkit.getPluginManager().registerEvents(new GlisteringMelonEatListener(this), this);
       getLogger().info("Edible Glistering Melons enabled");
     }
 
     // Banner
     if (getCustomConfig().getBoolean("banner-on-boats")) {
-      Bukkit.getPluginManager().registerEvents(new BannerBoatListener(), this);
+      Bukkit.getPluginManager().registerEvents(new BannerBoatListener(this), this);
       getLogger().info("Banner on boats enabled");
     }
 
@@ -302,6 +305,16 @@ public final class Main extends JavaPlugin implements Listener {
     if (getCustomConfig().getBoolean("melon-block-update")) {
       MelonBlockInteractionListener.saveMelonBlockWithItemDisplay();
     }
+  }
+
+  public boolean isFeatureEnabledInWorld(String configKey, World world) {
+    String overridePath = "world-overrides." + world.getName() + "." + configKey;
+
+    if (getConfig().contains(overridePath)) {
+      return getConfig().getBoolean(overridePath);
+    }
+
+    return getConfig().getBoolean(configKey);
   }
 
   private void setupStatistics() {

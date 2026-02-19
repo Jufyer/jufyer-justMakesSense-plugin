@@ -35,8 +35,17 @@ public class CauldronIceListener implements Listener {
   private final List<Location> fillingCauldrons = new ArrayList<>();
   public static final HashMap<Location, UUID> filledIceCauldronEntities = new HashMap<>();
 
+  private final Main plugin;
+
+  public CauldronIceListener(Main plugin) {
+    this.plugin = plugin;
+  }
+
   @EventHandler
   public void onChunkLoad(ChunkLoadEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("enable-ice", event.getWorld())) {
+      return;
+    }
     Chunk chunk = event.getChunk();
 
     int minHeight = chunk.getWorld().getMinHeight();
@@ -65,6 +74,9 @@ public class CauldronIceListener implements Listener {
 
   @EventHandler
   public void onPlayerMove(PlayerMoveEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("enable-ice", event.getPlayer().getWorld())) {
+      return;
+    }
     Chunk chunk = event.getPlayer().getChunk();
 
     int minHeight = chunk.getWorld().getMinHeight();
@@ -103,6 +115,9 @@ public class CauldronIceListener implements Listener {
 
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("enable-ice", event.getPlayer().getWorld())) {
+      return;
+    }
     if (event.getClickedBlock() == null || !event.getAction().isRightClick()) return;
     Location loc = event.getClickedBlock().getLocation().toBlockLocation();
 
@@ -118,6 +133,9 @@ public class CauldronIceListener implements Listener {
 
   @EventHandler
   public void onHopperInventorySearch(HopperInventorySearchEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("enable-ice", event.getBlock().getWorld())) {
+      return;
+    }
     Location cauldronLoc = event.getBlock().getLocation().add(0, 1, 0).toBlockLocation();
 
     if (filledIceCauldronEntities.containsKey(cauldronLoc)) {
@@ -132,6 +150,9 @@ public class CauldronIceListener implements Listener {
   }
 
   private void checkAndStartFilling(Block cauldron) {
+    if (!plugin.isFeatureEnabledInWorld("enable-ice", cauldron.getWorld())) {
+      return;
+    }
     if (isFreezingPossible(cauldron.getBiome(), cauldron.getLocation().getZ())) {
       if (cauldron.getType() == Material.WATER_CAULDRON) {
         if (!filledIceCauldronEntities.containsKey(cauldron.getLocation().toBlockLocation()) &&
@@ -154,6 +175,9 @@ public class CauldronIceListener implements Listener {
   }
 
   private void handlePistonMove(List<Block> blocks, BlockFace direction) {
+    if (!plugin.isFeatureEnabledInWorld("enable-ice", blocks.getFirst().getWorld())) {
+      return;
+    }
     HashMap<Location, UUID> moving = new HashMap<>();
     for (Block b : blocks) {
       Location oldLoc = b.getLocation().toBlockLocation();
@@ -180,7 +204,7 @@ public class CauldronIceListener implements Listener {
   }
 
   private void createRunner(Block cauldron) {
-    Main.getInstance().getLogger().info("Created Ice cauldron runner");
+    //Main.getInstance().getLogger().info("Created Ice cauldron runner");
     new org.bukkit.scheduler.BukkitRunnable() {
       @Override
       public void run() {

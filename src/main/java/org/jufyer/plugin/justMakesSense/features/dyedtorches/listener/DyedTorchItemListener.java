@@ -26,6 +26,10 @@ public class DyedTorchItemListener implements Listener {
 
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent event) {
+    if (!Main.getInstance().isFeatureEnabledInWorld("dyed-torches", event.getPlayer().getWorld())) {
+      return;
+    }
+
     ItemStack item = event.getItem();
     if (item != null && item.hasItemMeta()) {
       ItemMeta meta = item.getItemMeta();

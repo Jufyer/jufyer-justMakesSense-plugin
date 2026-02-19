@@ -1,10 +1,9 @@
-package org.jufyer.plugin.justMakesSense.features.waterBottle;
+package org.jufyer.plugin.justMakesSense.features.waterbottle;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.Block;
 import org.bukkit.entity.SplashPotion;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,6 +21,9 @@ import java.util.Random;
 public class WatterBottleConvertLavaListener implements Listener {
   @EventHandler
   public void onPotionSplash(PotionSplashEvent event) {
+    if (!Main.getInstance().isFeatureEnabledInWorld("water-bottles-convert-lava", event.getEntity().getWorld())) {
+      return;
+    }
     if (event.getPotion() instanceof SplashPotion potion) {
       ItemStack item = potion.getItem();
       PotionMeta meta = (PotionMeta) item.getItemMeta();

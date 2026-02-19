@@ -156,6 +156,11 @@ public class MelonBlockInteractionListener implements Listener {
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent event) {
     if (event.getClickedBlock() == null) return;
+
+    if (!Main.getInstance().isFeatureEnabledInWorld("melon-block-update", event.getPlayer().getWorld())) {
+      return;
+    }
+
     if (melonBlocks.containsKey(event.getClickedBlock().getLocation().toBlockLocation())) {
       if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
       if (event.getPlayer().isSneaking()) return;
@@ -199,6 +204,9 @@ public class MelonBlockInteractionListener implements Listener {
 
   @EventHandler
   public void onBlockGrow(BlockGrowEvent event) {
+    if (!Main.getInstance().isFeatureEnabledInWorld("melon-block-update", event.getBlock().getWorld())) {
+      return;
+    }
     if (event.getBlock().getType().equals(Material.MELON)) {
       spawnMelonBlock(event.getBlock().getLocation());
       event.setCancelled(true);
@@ -207,6 +215,9 @@ public class MelonBlockInteractionListener implements Listener {
 
   @EventHandler
   public void onBlockPlace(BlockPlaceEvent event) {
+    if (!Main.getInstance().isFeatureEnabledInWorld("melon-block-update", event.getBlock().getWorld())) {
+      return;
+    }
     if (event.getBlock().getType().equals(Material.MELON)) {
       spawnMelonBlock(event.getBlock().getLocation());
     }
@@ -215,6 +226,9 @@ public class MelonBlockInteractionListener implements Listener {
   @EventHandler
   public void onChunkLoad(ChunkLoadEvent event) {
     Chunk chunk = event.getChunk();
+    if (!Main.getInstance().isFeatureEnabledInWorld("melon-block-update", event.getWorld())) {
+      return;
+    }
     if (scannedChunks.contains(chunk)) return;
     Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
       for (int x = 0; x < 16; x++) {
@@ -240,6 +254,9 @@ public class MelonBlockInteractionListener implements Listener {
   public static void preserveStairShape() {
     Bukkit.getScheduler().runTaskTimer(Main.getInstance(), () -> {
       for (Location loc : melonBlockStairs.keySet()) {
+        if (loc.getWorld() != null && !Main.getInstance().isFeatureEnabledInWorld("melon-block-update", loc.getWorld())) {
+          continue;
+        }
         Block block = loc.getBlock();
         if (block.getBlockData() instanceof Stairs) {
           Stairs stairs = (Stairs) block.getBlockData();

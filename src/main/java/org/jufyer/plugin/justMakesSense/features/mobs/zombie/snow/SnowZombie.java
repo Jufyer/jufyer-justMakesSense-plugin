@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.jufyer.plugin.justMakesSense.Main;
 import org.jufyer.plugin.justMakesSense.features.mobs.zombie.SkinData;
 
 import java.util.ArrayList;
@@ -18,6 +19,10 @@ import java.util.List;
 
 public class SnowZombie implements Listener {
   public static void spawn(Location loc) {
+    if (!Main.getInstance().isFeatureEnabledInWorld("snow-zombie", loc.getWorld())) {
+      return;
+    }
+
     NPCRegistry registry = CitizensAPI.getNPCRegistry();
 
     NPC npc = registry.createNPC(EntityType.PLAYER, "Snow Zombie");
@@ -47,6 +52,10 @@ public class SnowZombie implements Listener {
 
   @EventHandler
   public void onEntitySpawn(EntitySpawnEvent event) {
+    if (!Main.getInstance().isFeatureEnabledInWorld("snow-zombie", event.getEntity().getWorld())) {
+      return;
+    }
+
     Biome[] biomesWherePossible = {
       Biome.FROZEN_PEAKS,
       Biome.JAGGED_PEAKS,

@@ -26,6 +26,10 @@ public class CopperHopperItemListener implements Listener {
 
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent event) {
+    if (!Main.getInstance().isFeatureEnabledInWorld("copper-hopper", event.getPlayer().getWorld())) {
+      return;
+    }
+
     ItemStack item = event.getItem();
     if (item != null && item.hasItemMeta()) {
       ItemMeta meta = item.getItemMeta();

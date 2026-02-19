@@ -16,11 +16,12 @@ public class BannerBoatListener implements Listener {
   public static final NamespacedKey BANNER_ARMORSTAND_KEY = new NamespacedKey(Main.getInstance(), "BANNER_ARMORSTAND");
   public static final NamespacedKey TEMPORARY_BANNER_ARMORSTAND_KEY = new NamespacedKey(Main.getInstance(), "TEMPORARY_BANNER_ARMORSTAND");
 
+  private final Main plugin;
 
-  /**
-   * @param location Location where the Armor Stand is summoned
-   * @return Armor Stand with no visibility, no gravity, no movement, no arms. Persistent
-   */
+  public BannerBoatListener(Main plugin) {
+    this.plugin = plugin;
+  }
+
   private ArmorStand spawnDummyArmorStand(Location location) {
     ArmorStand as = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
     as.setCanMove(false);
@@ -35,6 +36,9 @@ public class BannerBoatListener implements Listener {
 
   @EventHandler
   public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("banner-on-boats", event.getPlayer().getWorld())) {
+      return;
+    }
     Player player = event.getPlayer();
     Entity entity = event.getRightClicked();
 
@@ -100,6 +104,9 @@ public class BannerBoatListener implements Listener {
 
   @EventHandler
   public void onPlayerExitVehicle(VehicleExitEvent event) {
+    if (!plugin.isFeatureEnabledInWorld("banner-on-boats", event.getVehicle().getWorld())) {
+      return;
+    }
     if (!(event.getExited() instanceof Player)) return;
     if (!(event.getVehicle() instanceof Boat boat)) return;
 
