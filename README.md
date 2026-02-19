@@ -232,23 +232,12 @@ cauldron-mud: true
 cauldron-concrete: true
 
 # --------------------------------------------------
-# Cauldron Liquid Support
+# Cauldron Dispenser Support
 # --------------------------------------------------
-# Controls which liquids can be used with cauldrons
-# and how dispensers interact with them
+# Dispensers now can dispense liquid and powder snow into cauldrons
 
-# Allow dispensers to interact with cauldrons from below
-allow-interaction-from-below: true
-
-# Enable water cauldron behavior
-enable-water: true
-
-# Enable lava cauldron behavior
-enable-lava: true
-
-# Enable powder snow cauldron behavior
-enable-powder-snow: true
-
+# Enable dispenser rework
+cauldron-dispenser-support: true
 
 # --------------------------------------------------
 # Copper Hopper Mechanics
@@ -309,6 +298,22 @@ sponge-ignite: true
 
 # Splashing a Water Bottle into lava converts it into obsidian
 water-bottles-convert-lava: true
+
+# ==================================================
+# World Overrides (Optional)
+# ==================================================
+# Here you can override specific global settings for individual worlds.
+# If a world or feature is not listed here, it uses the global settings from above.
+# Example:
+# world-overrides:
+#   Lobby:
+#     enable-ice: false
+#     snow-zombie: false
+#   world_nether:
+#     enable-water: false
+#     water-bottles-convert-lava: false
+world-overrides:
+
 ```
 
 ---
