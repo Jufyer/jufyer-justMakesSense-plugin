@@ -200,6 +200,33 @@ H = Honeycomb
 
 ---
 
+## Horse Statistics Preview
+
+* Sneak-right-click on any horse to see its Stats
+* --> Removes the need to test them one by one
+
+<p align="center"><img src="https://imgur.com/WP2ETgE.png" alt="Horse Stats Preview"></p>
+
+---
+
+## Persistent enchanting lapis
+
+* Lapis lazuli stays in the enchanting table when closed.
+
+---
+
+## Crop protection
+
+* Farmland can no longer be trampled.
+
+---
+
+## Double Door support
+
+* Open both doors at once with a single interaction
+
+---
+
 ## Configuration
 
 All features can be configured individually.
@@ -298,6 +325,18 @@ sponge-ignite: true
 
 # Splashing a Water Bottle into lava converts it into obsidian
 water-bottles-convert-lava: true
+
+# Allows players to open two doors facing each other at once
+double-door: true
+
+# Prevent farmland from being trampled
+farmland-protection: true
+
+# Lapis lazuli stays in the enchanting table when closed
+persistent-lapis-lazuli: true
+
+# Sneak-right-click a horse to view its health, speed and jump strength
+horse-stats: true
 
 # ==================================================
 # World Overrides (Optional)

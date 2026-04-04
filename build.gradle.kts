@@ -5,6 +5,7 @@ plugins {
   id("io.papermc.paperweight.userdev") version "2.0.0-beta.19"
   id("xyz.jpenilla.run-paper") version "3.0.2"
   id("xyz.jpenilla.resource-factory-bukkit-convention") version "1.3.0"
+  id("idea")
 }
 
 group = "org.jufyer.plugin"
@@ -32,6 +33,12 @@ dependencies {
 
   compileOnly("io.th0rgal:oraxen:1.181.0")
   compileOnly("dev.lone:api-itemsadder:4.0.10")
+
+  // Für Compiler + IDE Autocomplete
+  compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+  // Für IDE
+  implementation("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+
 
   compileOnly(files("libs/citizens-api-2.0.33.jar"))
   compileOnly(files("libs/citizens-main-2.0.33.jar"))

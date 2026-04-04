@@ -15,9 +15,13 @@ import org.jufyer.plugin.justMakesSense.features.copperhopper.CopperHopperBlock;
 import org.jufyer.plugin.justMakesSense.features.copperhopper.CopperHopperRegistry;
 import org.jufyer.plugin.justMakesSense.features.copperhopper.listener.CopperHopperBlockListener;
 import org.jufyer.plugin.justMakesSense.features.copperhopper.listener.CopperHopperItemListener;
+import org.jufyer.plugin.justMakesSense.features.doubledoor.DoubleDoorSupport;
 import org.jufyer.plugin.justMakesSense.features.dyedtorches.DyedTorchRegistry;
 import org.jufyer.plugin.justMakesSense.features.dyedtorches.listener.DyedTorchBlockListener;
 import org.jufyer.plugin.justMakesSense.features.dyedtorches.listener.DyedTorchItemListener;
+import org.jufyer.plugin.justMakesSense.features.enchatingTable.PersistentLapis;
+import org.jufyer.plugin.justMakesSense.features.farmland.PreventTrampling;
+import org.jufyer.plugin.justMakesSense.features.horse.StatisticsPreview;
 import org.jufyer.plugin.justMakesSense.features.mobs.pets.PetProtectListener;
 import org.jufyer.plugin.justMakesSense.features.mobs.zombie.jungle.JungleZombie;
 import org.jufyer.plugin.justMakesSense.features.mobs.zombie.jungle.JungleZombieAITrait;
@@ -255,6 +259,30 @@ public class Main extends JavaPlugin {
     if (getCustomConfig().getBoolean("water-bottles-convert-lava")) {
       Bukkit.getPluginManager().registerEvents(new WatterBottleConvertLavaListener(), this);
       getLogger().info("Water Bottles Convert Lava enabled");
+    }
+
+    // Double Doors
+    if (getCustomConfig().getBoolean("double-door")) {
+      Bukkit.getPluginManager().registerEvents(new DoubleDoorSupport(), this);
+      getLogger().info("Double-Door support enabled");
+    }
+
+    // Farmland Protection
+    if (getCustomConfig().getBoolean("farmland-protection")) {
+      Bukkit.getPluginManager().registerEvents(new PreventTrampling(), this);
+      getLogger().info("Farmland protection enabled");
+    }
+
+    // Persistent Lapis
+    if (getCustomConfig().getBoolean("persistent-lapis-lazuli")) {
+      Bukkit.getPluginManager().registerEvents(new PersistentLapis(), this);
+      getLogger().info("Persistant Lapis Lazui enabled");
+    }
+
+    // Horse Stats
+    if (getCustomConfig().getBoolean("horse-stats")) {
+      Bukkit.getPluginManager().registerEvents(new StatisticsPreview(), this);
+      getLogger().info("Horse statistics preview enabled");
     }
 
     // Update-checker
