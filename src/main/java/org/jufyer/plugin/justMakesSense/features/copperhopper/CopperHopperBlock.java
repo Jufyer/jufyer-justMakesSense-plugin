@@ -99,7 +99,7 @@ public class CopperHopperBlock implements Listener {
   public static boolean ejectOneItem(Hopper hopper) {
     if (!Main.copperHopperItemCount.containsKey(hopper.getLocation())) Main.copperHopperItemCount.put(hopper.getLocation(), 0);
     int itemCount = Main.copperHopperItemCount.get(hopper.getLocation());
-    if (Main.getInstance().getCustomConfig().getInt("copper-hopper-item-count") > itemCount) {
+    if (Main.getInstance().getCustomConfig().getInt("copper-hopper-item-count") <= itemCount) {
       if (Main.copperHopperItemCount.get(hopper.getLocation()) <= Main.getInstance().getCustomConfig().getInt("copper-hopper-item-count")) {
         for (CopperVariant variant : CopperVariant.values()) {
           if (isWaxed(variant)) {

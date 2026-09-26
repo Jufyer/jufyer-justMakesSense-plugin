@@ -18,14 +18,16 @@ java {
 
 repositories {
   mavenCentral()
+
   maven("https://repo.papermc.io/repository/maven-public/")
   maven("https://jitpack.io")
 
   maven("https://oss.sonatype.org/content/groups/public/")
-  maven("https://maven.devs.beer/")
   maven("https://repo.oraxen.com/releases")
   maven("https://repo.citizensnpcs.co/")
 
+  // ItemsAdder
+  maven("https://repo.loohpjames.com/repository/")
 }
 
 dependencies {
@@ -33,12 +35,6 @@ dependencies {
 
   compileOnly("io.th0rgal:oraxen:1.181.0")
   compileOnly("dev.lone:api-itemsadder:4.0.10")
-
-  // Für Compiler + IDE Autocomplete
-  compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
-  // Für IDE
-  implementation("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
-
 
   compileOnly(files("libs/citizens-api-2.0.33.jar"))
   compileOnly(files("libs/citizens-main-2.0.33.jar"))

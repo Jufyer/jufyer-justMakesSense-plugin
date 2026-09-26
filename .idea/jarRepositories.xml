@@ -61,5 +61,10 @@
       <option name="name" value="maven6" />
       <option name="url" value="https://repo.citizensnpcs.co/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven6" />
+      <option name="name" value="maven6" />
+      <option name="url" value="https://repo.loohpjames.com/repository/" />
+    </remote-repository>
   </component>
 </project>
